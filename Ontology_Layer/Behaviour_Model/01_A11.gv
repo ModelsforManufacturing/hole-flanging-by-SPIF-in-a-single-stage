@@ -1,0 +1,59 @@
+digraph behaviourmodel {
+
+# activity title
+labelloc="t"
+label="A11 Update Design Part"
+
+# inputs and outputs
+node [shape=record, style=filled, fillcolor=white, color=black]
+part_d [label="{Design Part | diameter \l \l}"]
+part_h [label="{Design Part | height \l}"]
+part_m [label="{Design Part | 3d model \l}"]
+blank [label="{Blank Sheet | hole diameter \l}"]
+iss_sim [label="{Simulation Issues | flange height \l}"]
+
+# mechanisms
+node [shape=box, style=filled, fillcolor=white, color=green]
+m1 [label="Equation Solver"]
+
+# tasks definition
+node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]
+Start
+t1 [label="Calculate flange height"]
+t2 [label="Generate CAD Model"]
+End
+
+# rules
+node [shape=box, style="filled, rounded", fillcolor=white, color=blue]
+r1 [label="Update the flange height\n according to an equation"]
+r2 [label="Update a parametrized\n CAD model with\n the actual parameters"]
+
+# attaching rules
+edge [dir=none, color=blue, style=dashed]
+t1 -> r1
+t2 -> r2
+
+# task sequence
+edge [dir=forward, color=blue, fontcolor=blue, style=solid]
+Start -> t1 -> t2 -> End
+
+# attaching mechanisms
+edge [dir=none, color=green, style=dashed]
+m1 -> t1
+
+# attaching inputs and outputs
+edge [dir=forward, color=black, fontcolor=black, style=solid]
+{part_d, blank, iss_sim} -> t1
+t1 -> part_h
+{part_d, blank, part_h, part_m} -> t2 -> part_m
+
+# constraints
+node [shape=ellipse, style=filled, fillcolor=white, color=red]
+c1 [label="part.h > issues.h"]
+
+# attaching constraints
+edge [dir=none, color=red, style=dashed]
+{part_h, iss_sim} -> c1 -> r1
+
+}
+

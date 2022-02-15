@@ -1,0 +1,56 @@
+digraph behaviourmodel {
+
+
+# activity title
+labelloc="t"
+label="A21 Extract Tool Trajectory"
+
+# inputs and outputs
+node [shape=record, style=filled, fillcolor=white, color=black]
+program [label="{NC Program | apt code \l}"]
+path [label="{Tool Trajectory | toolpath code \l}"]
+
+# mechanisms
+node [shape=box, style=filled, fillcolor=white, color=green]
+converter [label="NC Code Converter"]
+
+# tasks definition
+node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]
+Start
+t1 [label="Read next line"]
+t2 [label="Calculate time"]
+t3 [label="Write results"]
+End
+
+# rules
+node [shape=box, style="filled, rounded", fillcolor=white, color=blue]
+r1 [label="Read line,\ntest if it is motion\nand get variables"]
+r2 [label="Calculate path lenght:\ntime = lenght/feedrate"]
+r3 [label="Append results according to\n the simulation solver, e.g. Abaqus:\n ((time, X), (time, Y), (time, Z))"]
+
+# attaching rules
+edge [dir=none, color=blue, style=dashed]
+t1 -> r1
+t2 -> r2
+t3 -> r3
+
+# task sequence
+edge [dir=forward, color=blue, fontcolor=blue, style=solid]
+Start -> t1
+t1 -> t1 [label="no motion"]
+t1 -> t2 [label="(feedrate, X, Y, Z)"]
+t2 -> t3 [label="(time, X, Y, Z)"]
+t3 -> t1 [label="iterate"]
+t3 -> End
+
+# attaching mechanisms
+edge [dir=none, color=green, style=dashed]
+converter -> Start
+
+# attaching inputs and outputs
+edge [dir=forward, color=black, fontcolor=black, style=solid]
+program -> t1 [label="NC code"]
+t3 -> path
+
+}
+

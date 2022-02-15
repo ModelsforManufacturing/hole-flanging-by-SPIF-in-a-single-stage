@@ -1,0 +1,72 @@
+digraph behaviourmodel {
+
+
+# activity title
+labelloc="t"
+label="Activity Title"
+
+# inputs and outputs
+node [shape=box, style=filled, fillcolor=white, color=black]
+i1 [label="Input 1"]
+i2 [label="Input 2"]
+o1 [label="Ouput 1"]
+o2 [label="Ouput 2"]
+o3 [label="Ouput 3"]
+
+# mechanisms
+node [shape=box, style=filled, fillcolor=white, color=green]
+m1 [label="Mechanism A"]
+m2 [label="Mechanism B"]
+
+# tasks definition
+node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]
+Start
+t1 [label="Task 1"]
+t2 [label="Task 2"]
+t3 [label="Task 3"]
+End
+
+# rules
+node [shape=box, style="filled, rounded", fillcolor=white, color=blue]
+r1 [label="Rule 1"]
+r2 [label="Rule 2"]
+r3 [label="Rule 3"]
+
+# attaching rules
+edge [dir=none, color=blue, style=dashed]
+t1 -> r1
+t2 -> r2
+t3 -> r3
+
+# task sequence
+edge [dir=forward, color=blue, fontcolor=blue, style=solid]
+Start -> {t1 t2}
+t1 -> t3 [label="object1"]
+t2 -> t3 [label="object2"]
+t3 -> End
+
+# attaching mechanisms
+edge [dir=none, color=green, style=dashed]
+m1 -> {t1 t2}
+m2 -> t3
+
+# attaching inputs and outputs
+edge [dir=forward, color=black, fontcolor=black, style=solid]
+i1 -> t1 [label="prop1"]
+i2 -> t2 [label="prop2"]
+t1 -> o1 [label="prop3"]
+t2 -> o2 [label="prop4"]
+t3 -> o3 [label="prop5"]
+
+# constraints
+node [shape=ellipse, style=filled, fillcolor=white, color=red]
+c1 [label="Constraint 1"]
+c2 [label="Constraint 2"]
+
+# attaching constraints
+edge [dir=none, color=red, style=dashed]
+i1 -> c1 -> r1
+i2 -> c2 -> r2
+
+}
+

@@ -1,0 +1,52 @@
+digraph behaviourmodel {
+
+
+# activity title
+labelloc="t"
+label="A22 Simulate SPIF Process"
+
+# inputs and outputs
+node [shape=record, style=filled, fillcolor=white, color=black]
+blank [label="{Blank Sheet | hole diameter \l}"]
+raw [label="{Raw Material | thickness \l}"]
+path [label="{Tool Trajectory | toolpath code \l}"]
+sim_res [label="{Simulation Results | 3d analysis output \l}"]
+sim_model [label="{Simulation Model | 3d analysis model \l}"]
+elastic [label="{Elastic behaviour | elasticity modulus \l poisson ratio \l}"]
+plastic [label="{Plastic behaviour | strain-stress curve \l anisotropy coefficients \l}"]
+        
+# mechanisms
+node [shape=box, style=filled, fillcolor=white, color=green]
+fea [label="FEA System"]
+
+# tasks definition
+node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]
+Start
+t1 [label="Create Simulation Model"]
+t2 [label="Run Simulation Model"]
+End
+
+# rules
+node [shape=box, style="filled, rounded", fillcolor=white, color=blue]
+r1 [label="Update a parametrized\n Finite Element model with the\n actual parameters"]
+r2 [label="Run solver and\n confirm success\n (valid output file)"]
+
+# attaching rules
+edge [dir=none, color=blue, style=dashed]
+t1 -> r1
+t2 -> r2
+
+# task sequence
+edge [dir=forward, color=blue, fontcolor=blue, style=solid]
+Start -> t1 -> t2 -> End
+
+# attaching mechanisms
+edge [dir=none, color=green, style=dashed]
+fea -> Start
+
+# attaching inputs and outputs
+edge [dir=forward, color=black, fontcolor=black, style=solid]
+{blank, raw, path, elastic, plastic} -> t1 -> sim_model
+sim_model -> t2 -> sim_res
+}
+

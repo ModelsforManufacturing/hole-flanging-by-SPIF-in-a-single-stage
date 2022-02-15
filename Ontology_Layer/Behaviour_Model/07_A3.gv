@@ -1,0 +1,58 @@
+digraph behaviourmodel {
+
+
+# activity title
+labelloc="t"
+label="A3 Inspect Manufactured Part"
+
+# inputs and outputs
+node [shape=record, style=filled, fillcolor=white, color=black]
+part_3d [label="{Design Part | 3d part \l}"]
+part_tol [label="{Design Part | tolerance \l}"]
+manuf_3d [label="{Manufactured Part | 3d part \l}"]
+insp_map [label="{Inspected Part | deviation map \l}"]
+insp_max [label="{Inspected Part | maximum deviation \l}"]
+insp_iss [label="{Inspection Issues | dimensional inaccuracy \l}"]
+
+# mechanisms
+node [shape=box, style=filled, fillcolor=white, color=green]
+cam [label="CAD System"]
+
+# tasks definition
+node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]
+Start
+t1 [label="Generate geometrical deviations"]
+t2 [label="Calculate maximum deviation"]
+t3 [label="Check tolerance"]
+End
+
+# rules
+node [shape=box, style="filled, rounded", fillcolor=white, color=blue]
+r1 [label="By comparing both 3d parts"]
+r2 [label="Find the maximum deviation"]
+r3 [label="Compare maximum deviation\n and tolerance"]
+
+# attaching rules
+edge [dir=none, color=blue, style=dashed]
+t1 -> r1
+t2 -> r2
+t3 -> r3
+
+# task sequence
+edge [dir=forward, color=blue, fontcolor=blue, style=solid]
+Start -> t1
+t1 -> t2
+t2 -> t3
+t3 -> End
+
+# attaching mechanisms
+edge [dir=none, color=green, style=dashed]
+cam -> Start
+
+# attaching inputs and outputs
+edge [dir=forward, color=black, fontcolor=black, style=solid]
+{part_3d, manuf_3d} -> t1 -> insp_map
+insp_map -> t2 -> insp_max
+{part_tol, insp_max} -> t3 -> insp_iss
+}
+

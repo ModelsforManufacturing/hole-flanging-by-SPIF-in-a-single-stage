@@ -1,0 +1,60 @@
+digraph datamodel {
+    colorscheme=pastel19
+    node [shape=record, style="filled, rounded", fillcolor=white, color=black]
+
+/* DATA MODEL */
+
+    /* SPIF Design Model */
+    subgraph clusterParts {
+        label="SPIF Design Model"; style=filled; color=lightgrey;
+
+        blank [label="Blank Sheet"]
+        raw [label="Raw Material"]
+        part [label="Design Part"]
+        tool [label="Forming Tool"]
+    }
+    blank -> raw [label="made of"]
+
+    /* SPIF CNC Model */
+    subgraph clusterNC {
+        label="SPIF CNC Model"; style=filled; color=lightgrey;
+
+        strategy [label="Strategy"]
+        nc [label="NC Model"]
+        program [label="NC Program"]
+    }
+
+    /* SPIF Simulation Model */
+    subgraph clustersimulation {
+        label="SPIF Simulation Model"; style=filled; color=lightgrey;
+
+        path [label="Tool Trajectory"]
+        sim_model [label="Simulation Model"]
+        sim_res [label="Simulation Results"]
+        part_sim [label="Simulated Part"]
+        iss_sim [label="Simulation Issues"]
+    }
+
+    /* SPIF Inspection Model */
+    subgraph clusterinspection {
+        label="SPIF Inspection Model"; style=filled; color=lightgrey;
+
+        part_manuf [label="Manufactured Part"]
+        part_insp [label="Inspected Part"]
+        iss_insp [label="Inspection Issues"]
+    }
+
+    /* Global relations */
+    {part, tool, strategy} -> nc [label="defines"]
+    nc -> program [label="generates"]
+    {blank, tool, path} -> sim_model [label="defines"]
+    sim_model -> sim_res [label="calculates"]
+    sim_res -> part_sim [label="extracts"]
+    program -> path [label="extracts"]
+    {part, part_sim} -> iss_sim [label="can occur"]
+    {blank, tool, program} -> part_manuf [label="manufactures"]
+    part_manuf -> part_insp [label="inspected as"]
+    {part, part_insp} -> iss_insp [label="can occur"]
+
+}
+

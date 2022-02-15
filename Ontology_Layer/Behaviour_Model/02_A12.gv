@@ -1,0 +1,61 @@
+digraph behaviourmodel {
+
+# activity title
+labelloc="t"
+label="A12 Generate NC"
+
+# inputs and outputs
+node [shape=record, style=filled, fillcolor=white, color=black]
+part [label="{Design Part | 3d part \l}"]
+tool [label="{Forming Tool | radius \l}"]
+strategy [label="{Strategy | step down \l feedrate \l}"]
+program [label="{NC Program | apt code \l}"]
+nc [label="{NC Model | 3d process \l}"]
+
+# mechanisms
+node [shape=box, style=filled, fillcolor=white, color=green]
+m1 [label="CAD/CAM System"]
+
+# tasks definition
+node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]
+Start
+t1 [label="Create NC Model"]
+t2 [label="Simulate NC Model"]
+t3 [label="Generate NC Code"]
+End
+
+# rules
+node [shape=box, style="filled, rounded", fillcolor=white, color=blue]
+r1 [label="Update a parametrized\n NC model with the\n actual parameters"]
+r2 [label="Analyse tool path\n to avoid tool collisions"]
+r3 [label="Generate and export\n the APT code"]
+
+# attaching rules
+edge [dir=none, color=blue, style=dashed]
+t1 -> r1
+t2 -> r2
+t3 -> r3
+
+# task sequence
+edge [dir=forward, color=blue, fontcolor=blue, style=solid]
+Start -> t1 -> t2 -> t3 -> End
+
+# attaching mechanisms
+edge [dir=none, color=green, style=dashed]
+m1 -> Start
+
+# attaching inputs and outputs
+edge [dir=forward, color=black, fontcolor=black, style=solid]
+{part, tool, strategy} -> t1 -> nc
+nc -> t2
+t2 -> nc
+nc -> t3 -> program
+
+# constraints
+node [shape=ellipse, style=filled, fillcolor=white, color=red]
+
+# attaching constraints
+edge [dir=none, color=red, style=dashed]
+
+}
+

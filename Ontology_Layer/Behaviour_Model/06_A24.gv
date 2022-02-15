@@ -1,0 +1,67 @@
+digraph behaviourmodel {
+
+
+# activity title
+labelloc="t"
+label="A24 Analyze Simulation"
+
+# inputs and outputs
+node [shape=record, style=filled, fillcolor=white, color=black]
+sim_res [label="{Simulation Results | 3d analysis output \l}"]
+part [label="{Design Part | 3d part \l tolerance \l}"]
+fracture [label="{Fracture behaviour | fracture curve \l}"]
+part_sim_3d [label="{Simulated Part | 3d part \l}"]
+part_sim_dev [label="{Simulated Part | maximum deviation \l}"]
+part_sim_map [label="{Simulated Part | strain map \l}"]
+part_sim_frac [label="{Simulated Part | fracture location \l}"]
+
+# mechanisms
+node [shape=box, style=filled, fillcolor=white, color=green]
+cad [label="CAD System"]
+fea [label="FEA System"]
+
+# tasks definition
+node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]
+Start
+t1 [label="Extract 3d part"]
+t2 [label="Calculate maximum deviation"]
+t3 [label="Extract strain map"]
+t4 [label="Find fracture location"]
+End
+
+# rules
+node [shape=box, style="filled, rounded", fillcolor=white, color=blue]
+r1 [label="Open '3d analysis output' file\n and export the '3d part'\n (to be compared\n with the design part)"]
+r2 [label="Find max deviation\n by comparing\n 3d parts"]
+r3 [label="Open '3d analysis output' file\n and export 'strain map'\n (to be analyzed in a FLD)"]
+r4 [label="Construct a FLD and\n find fracture location\n (if any)"]
+
+# attaching rules
+edge [dir=none, color=blue, style=dashed]
+t1 -> r1
+t2 -> r2
+t3 -> r3
+t4 -> r4
+
+# task sequence
+edge [dir=forward, color=blue, fontcolor=blue, style=solid]
+Start -> t1
+t1 -> t2
+t2 -> t3
+t3 -> t4
+t4 -> End
+
+# attaching mechanisms
+edge [dir=none, color=green, style=dashed]
+cad -> {t2, t4}
+fea -> {t1, t3}
+
+# attaching inputs and outputs
+edge [dir=forward, color=black, fontcolor=black, style=solid]
+sim_res -> t1 -> part_sim_3d
+{part, part_sim_3d} -> t2 -> part_sim_dev
+sim_res -> t3 -> part_sim_map
+{part_sim_map, fracture} -> t4 -> part_sim_frac
+
+}
+
