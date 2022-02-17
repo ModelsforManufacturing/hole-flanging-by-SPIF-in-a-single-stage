@@ -1,4 +1,4 @@
-# hole-flanging-by-SPIF-in-a-single-stage
+# MfM case study: hole flanging by SPIF in a single stage
 
 
 ## 3-Layer Model

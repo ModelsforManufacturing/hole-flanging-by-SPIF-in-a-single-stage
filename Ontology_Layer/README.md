@@ -1,7 +1,7 @@
-# hole-flanging-by-SPIF-in-a-single-stage
+# MfM case study: hole flanging by SPIF in a single stage
 
 
-## Data Layer
+## Ontology Layer
 
 ### Scope Model
 
