@@ -10,9 +10,12 @@ There is a function for each 'Task' of the 'Elementary Activities'.
 
 Format:
 
-def <task>(<input_1>, ...(<inputn_>):
+def <task>(<input_1>, ...(<input_n>):
     ''' <rule> '''
-    ...
+    if <constraint>:
+        <action>
+    else:
+        <action>
     return (<output_1>, ...<output_n>)
 
 """
@@ -22,7 +25,7 @@ def <task>(<input_1>, ...(<inputn_>):
 A11 Update Design Part
 """
 
-def calculate_flange_height(blank_d, part_d, part_h, simul_issues_h):
+def calculate_flange_height(blank_d, part_d, simul_issues_h):
     ''' Update the flange height according to an equation '''
     if !simul_issues_h or part_h == 0:
         part_h = (part_d - blank_d)/2
