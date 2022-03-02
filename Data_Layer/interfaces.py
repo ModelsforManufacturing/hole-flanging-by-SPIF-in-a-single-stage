@@ -12,9 +12,9 @@ import configparser
 def retrieve_data(datafile):
     """
     Retrieve data from the Data Layer.
-    Example of datafile: 'example_01.ini'
+    Example of datafile: 'instance01.ini'
     """
-    parser = configparser.SafeConfigParser()
+    parser = configparser.ConfigParser()
     parser.read(datafile)
 
     blank_d = float(parser.get('Blank Sheet', 'hole diameter'))
@@ -22,37 +22,44 @@ def retrieve_data(datafile):
     part_d = float(parser.get('Design Part', 'diameter'))
     part_h = float(parser.get('Design Part', 'height'))
     part_tol = float(parser.get('Design Part', 'tolerance'))
-    part_3d = string(parser.get('Design Part', '3d part'))
-    tool_r = string(parser.get('Forming Tool', 'radius'))
+    part_3d = parser.get('Design Part', '3d part')
+    tool_r = float(parser.get('Forming Tool', 'radius'))
+    issues_h = float(parser.get('Simulation Issues', 'flange height'))
     
-    variables = (blank_d, blank_t, part_d, part_h, part_tol, part_3d, tool_r)
-    
-    return variables
+    return blank_d, blank_t, part_d, part_h, part_tol, part_3d, tool_r, issues_h
+
 
 def save_data(variables, datafile):
     """
     Save output data to the Data Layer.
     Save all data to another file and trace life cycle of files.
     File name format: <instance_name>_A<activity_number>_T<task_number>.ini
-    Example: 'example_01_A11_T1.ini'
+    Example: 'instance01_A11_T1.ini'
     """
-    blank_d, blank_t, part_d, part_h, part_tol, part_3d, tool_r = variables
+    blank_d, blank_t, part_d, part_h, part_tol, part_3d, tool_r, issues_h = variables
 
-    parser = configparser.SafeConfigParser()
+    parser = configparser.ConfigParser()
     parser.add_section('Blank Sheet')
-    parser.set('Blank Sheet', 'hole diameter', '%s' % blank_d))
+    parser.set('Blank Sheet', 'hole diameter', '%s' % blank_d)
     parser.add_section('Raw Material')
-    parser.set('Raw Material', 'thickness', '%s' % blank_t))
+    parser.set('Raw Material', 'thickness', '%s' % blank_t)
     parser.add_section('Design Part')
-    parser.set('Design Part', 'diameter', '%s' % part_d))
-    parser.set('Design Part', 'height', '%s' % part_h))
-    parser.set('Design Part', 'tolerance', '%s' % part_tol))
-    parser.set('Design Part', '3d part', '%s' % part_3d))
+    parser.set('Design Part', 'diameter', '%s' % part_d)
+    parser.set('Design Part', 'height', '%s' % part_h)
+    parser.set('Design Part', 'tolerance', '%s' % part_tol)
+    parser.set('Design Part', '3d part', '%s' % part_3d)
     parser.add_section('Forming Tool')
-    parser.set('Forming Tool', 'radius', '%s' % tool_r))
+    parser.set('Forming Tool', 'radius', '%s' % tool_r)
+    parser.add_section('Simulation Issues')
+    parser.set('Simulation Issues', 'flange height', '%s' % issues_h)
 
-    parser.write(datafile)
+    with open(datafile, 'w') as configfile:
+        parser.write(configfile)
 
 
     
+if __name__ == '__main__':
+    variables = retrieve_data('Data_Layer/instance01.ini')
+    print(variables)
+    save_data(variables, 'Data_Layer/instance01_output.ini')
 

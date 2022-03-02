@@ -1,0 +1,51 @@
+Language = "VBSCRIPT"
+
+' Actualiza las trayectorias del punzón
+' Ejecutar macro con CATProcess activo
+
+Sub CATMain()
+
+	Dim MfgDoc1 As Document
+	Dim ActivityRef As AnyObject
+	Dim Setup1 As ManufacturingSetup
+	Dim Program1 As ManufacturingProgram
+	
+	Set MfgDoc1 = CATIA.ActiveDocument
+	Set ActivityRef = MfgDoc1.GetItem("Process")
+
+	If (ActivityRef.IsSubTypeOf("PhysicalActivity")) Then
+
+		Set childs = ActivityRef.ChildrenActivities
+		quantity = childs.Count
+
+		if quantity <= 0 then
+			Exit Sub
+		End if
+
+		NumberOfPO = 0
+
+		For I=1 To quantity
+			Set child = childs.Item(I)
+			If (child.IsSubTypeOf("ManufacturingSetup")) Then
+				Set Setup1 = child
+				NumberOfPO = NumberOfPO +1
+				Exit For
+			End If
+		Next   
+	End If
+
+	if NumberOfPO <= 0 then
+	  Exit Sub
+	End if
+
+	Set ProgramList = Setup1.Programs
+	Set Program1 = ProgramList.GetElement(1)
+	Set ActInProg = Program1.ChildrenActivities
+	
+	
+
+End Sub
+
+
+
+

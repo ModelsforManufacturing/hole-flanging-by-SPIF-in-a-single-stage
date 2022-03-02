@@ -35,13 +35,13 @@ digraph datamodel {
         iss_sim [label="Simulation Issues"]
     }
 
-    /* SPIF Inspection Model */
-    subgraph clusterinspection {
-        label="SPIF Inspection Model"; style=filled; color=lightgrey;
+    /* SPIF Manufacturing Model */
+    subgraph clustermanuf {
+        label="SPIF Manufacturing & Analysis Model"; style=filled; color=lightgrey;
 
         part_manuf [label="Manufactured Part"]
-        part_insp [label="Inspected Part"]
-        iss_insp [label="Inspection Issues"]
+        part_anal [label="Analyzed Part"]
+        iss_manuf [label="Manufacturing Issues"]
     }
 
     /* Global relations */
@@ -53,8 +53,8 @@ digraph datamodel {
     program -> path [label="extracts"]
     {part, part_sim} -> iss_sim [label="can occur"]
     {blank, tool, program} -> part_manuf [label="manufactures"]
-    part_manuf -> part_insp [label="inspected as"]
-    {part, part_insp} -> iss_insp [label="can occur"]
+    part_manuf -> part_anal [label="analyzed as"]
+    {part, part_manuf} -> iss_manuf [label="can occur"]
 
 }
 

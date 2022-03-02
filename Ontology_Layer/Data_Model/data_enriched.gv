@@ -35,13 +35,13 @@ digraph datamodel {
         iss_sim [label="Simulation Issues"]
     }
 
-    /* SPIF Inspection Model */
-    subgraph clusterinspection {
-        label="SPIF Inspection Model"; style=filled; color=lightgrey;
+    /* SPIF Manufacturing Model */
+    subgraph clustermanuf {
+        label="SPIF Manufacturing & Analysis Model"; style=filled; color=lightgrey;
 
         part_manuf [label="Manufactured Part"]
-        part_insp [label="Inspected Part"]
-        iss_insp [label="Inspection Issues"]
+        part_anal [label="Analyzed Part"]
+        iss_manuf [label="Manufacturing Issues"]
     }
 
     /* Global relations */
@@ -53,8 +53,8 @@ digraph datamodel {
     program -> path [label="extracts"]
     {part, part_sim} -> iss_sim [label="can occur"]
     {blank, tool, program} -> part_manuf [label="manufactures"]
-    part_manuf -> part_insp [label="inspected as"]
-    {part, part_insp} -> iss_insp [label="can occur"]
+    part_manuf -> part_anal [label="analyzed as"]
+    {part, part_manuf} -> iss_manuf [label="can occur"]
 
 
 /* ENRICH DATA MODEL: NEW OBJECTS AND ATTRIBUTES */
@@ -87,15 +87,15 @@ digraph datamodel {
         path [label="{Tool Trajectory | toolpath code \l}"]
         sim_model [label="{Simulation Model | 3d analysis model \l}"]
         sim_res [label="{Simulation Results | 3d analysis output \l}"]
-        part_sim [label="{Simulated Part | 3d part \l maximum deviation \l strain map \l fracture location \l}"]
-        iss_sim [label="{Simulation Issues | flange height \l dimensional inaccuracy \l wall fracture \l edge fracture \l}"]
+        part_sim [label="{Simulated Part | strain distribution \l fracture location \l}"]
+        iss_sim [label="{Simulation Issues | flange height \l}"]
     }
 
-    /* SPIF Inspection Model */
-    subgraph clusterinspection {
-        part_manuf [label="{Manufactured Part | 3d part \l failed \l fracture location \l height \l}"]
-        part_insp [label="{Inspected Part | deviation map \l maximum deviation \l}"]
-        iss_insp [label="{Inspection Issues | dimensional inaccuracy \l}"]
+    /* SPIF Manufacturing Model */
+    subgraph clustermanuf {
+        part_manuf [label="{Manufactured Part | failed \l fracture location \l height \l diameter \l photos \l}"]
+        part_anal [label="{Analyzed Part | strain distribution \l thickness profile \l fractographies \l}"]
+        iss_manuf [label="{Manufacturing Issues | flange height \l}"]
     }
 }
 

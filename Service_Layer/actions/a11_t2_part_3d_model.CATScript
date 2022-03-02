@@ -1,0 +1,82 @@
+Language = "VBSCRIPT"
+
+' Cambia los valores de los parametros en el sketch
+' Parametros: Rp, W, H, A, Ri, Re
+' Ejecutar macro con CATPart activo
+
+Sub CATMain()
+
+	Dim Rp, longitud_W, longitud_H, Ri, Re, Pendiente As Single
+	Dim Wmax, Hmin, Amax, Rimax, Remax, pi As Single
+	pi = 3.141592654
+
+	'
+	' Recupera parametros
+	'
+	Set partDocument1 = CATIA.ActiveDocument
+	Set part1 = partDocument1.Part
+	Set bodies1 = part1.Bodies
+	Set body1 = bodies1.Item("PartBody")
+	Set shapes1 = body1.Shapes
+	Set shaft1 = shapes1.Item("Shaft.1")
+	Set sketch1 = shaft1.Sketch
+	Set constraints1 = sketch1.Constraints
+	
+	Set constraint1 = constraints1.Item("W")
+	Set length1 = constraint1.Dimension
+	
+	Set constraint2 = constraints1.Item("H")
+	Set length2 = constraint2.Dimension
+	
+	Set constraint3 = constraints1.Item("Ri")
+	Set length3 = constraint3.Dimension
+	
+	Set constraint4 = constraints1.Item("Re")
+	Set length4 = constraint4.Dimension
+	
+	Set constraint5 = constraints1.Item("A")
+	Set angle1 = constraint5.Dimension
+
+	Set constraint6 = constraints1.Item("Rp")
+	Set radius1 = constraint6.Dimension
+	
+	
+	'
+	' Pregunta al usuario los nuevos valores
+	'
+	' Radio del punzon Rp
+	Rp = InputBox("Elija el radio del punzón: 6, 8, 10 mm", "Radio del punzón Rp (mm)", 6)
+	
+	' Ancho W
+	Wmax = 45.8 - Rp
+	longitud_W = InputBox("Introduzca la diferencia entre los radios de los agujeros resultantes en las 2 pasadas de rebordeado, W < " & Wmax, "Ancho W (mm)", 10)
+	
+	' Altura H
+	Hmin = 1.8
+	longitud_H = InputBox("Introduzca la altura del escalón, H > " & Hmin, "Altura H (mm)", 10)
+	
+	' Pendiente A
+	Amax = 60
+	Pendiente = InputBox("Introduzca la pendiente del escalón, A < " & Amax & "º", "Pendiente del escalón A (º)", 5)
+	
+	' Radio interno Ri
+	Rimax = longitud_W / (1 - Sin(Pendiente * pi / 180))
+	Ri = InputBox("Introduzca el radio interno en el escalón de bajada, " & Rp & " < Ri < " & Rimax, "Radio interno Ri (mm)", Rp)
+	
+	' Radio externo Re
+	Remax = Rimax - Ri
+	Re = InputBox("Introduzca el radio externo en el escalón de bajada, Re < " & Remax, "Radio externo Re (mm)", 0)
+	
+	'
+	' Actualiza parametros
+	'
+	radius1.Value = Rp
+	length1.Value = longitud_W
+	length2.Value = longitud_H
+	length3.Value = Ri
+	length4.Value = Re
+	angle1.Value = Pendiente
+	
+	part1.Update
+	
+End Sub

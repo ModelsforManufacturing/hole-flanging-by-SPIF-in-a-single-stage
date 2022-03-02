@@ -9,9 +9,8 @@ label="A23 Validate Simulation"
 node [shape=record, style=filled, fillcolor=white, color=black]
 sim_res [label="{Simulation Results | 3d analysis output \l}"]
 sim_iss_h [label="{Simulation Issues | flange height \l}"]
-sim_iss_inac [label="{Simulation Issues | dimensional inaccuracy \l}"]
-sim_iss_wall [label="{Simulation Issues | wall fracture \l}"]
-sim_iss_edge [label="{Simulation Issues | edge fracture \l}"]
+sim_part [label="{Simulated Part | fracture location \l}"]
+
 
 # mechanisms
 node [shape=box, style=filled, fillcolor=white, color=green]
@@ -20,33 +19,25 @@ fea [label="FEA System"]
 # tasks definition
 node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]
 Start
-t1 [label="Check Fractured Wall"]
-t2 [label="Check Fractured Edge"]
-t3 [label="Check Finished Flange"]
-t4 [label="Check Tolerances"]
+t1 [label="Check Fracture"]
+t2 [label="Check Finished Flange"]
 End
 
 # rules
 node [shape=box, style="filled, rounded", fillcolor=white, color=blue]
-r1 [label="Represent strains in a FLD and\n compare with fracture curve"]
-r2 [label="Represent strains in a FLD and\n compare with fracture curve"]
-r3 [label="Check that the forming tool\n formed the entire flange"]
-r4 [label="Measure maximum deviation and\n check it is within tolerance"]
+r1 [label="Represent strains in a FLD and\n compare with fracture curve\n to determine fracture location:\n wall, edge or none"]
+r2 [label="Check that the forming tool\n formed the entire flange"]
 
 # attaching rules
 edge [dir=none, color=blue, style=dashed]
 t1 -> r1
 t2 -> r2
-t3 -> r3
-t4 -> r4
 
 # task sequence
 edge [dir=forward, color=blue, fontcolor=blue, style=solid]
 Start -> t1
 t1 -> t2
-t2 -> t3
-t3 -> t4
-t4 -> End
+t2 -> End
 
 # attaching mechanisms
 edge [dir=none, color=green, style=dashed]
@@ -54,10 +45,8 @@ fea -> Start
 
 # attaching inputs and outputs
 edge [dir=forward, color=black, fontcolor=black, style=solid]
-sim_res -> {t1, t2, t3, t4}
-t1 -> sim_iss_wall
-t2 -> sim_iss_edge
-t3 -> sim_iss_h
-t4 -> sim_iss_inac
+sim_res -> {t1, t2}
+t1 -> sim_part
+t2 -> sim_iss_h
 }
 

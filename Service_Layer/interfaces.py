@@ -26,23 +26,45 @@ A11 Update Design Part
 """
 
 def calculate_flange_height(blank_d, part_d, simul_issues_h):
-    ''' Update the flange height according to an equation '''
-    if !simul_issues_h or part_h == 0:
-        part_h = (part_d - blank_d)/2
-    else:
-        part_h = simul_issues_h     # increase flange height
+    '''
+    Update the flange height according to an equation.
+    The equation has been defined as a Python function.
+    Import and run the Python function.
+    '''
+    
+    from Service_Layer.actions.a11_t1_flange_height import flange_height
+    part_h = flange_height(part_d, blank_d)
+    
+    if not part_h > simul_issues_h:
+    
+        from Service_Layer.actions.a11_t1_flange_height import alternative_flange_height
+        part_h = alternative_flange_height(part_d, blank_d, simul_issues_h)
+        
     return part_h
 
-def generate_cad_model(blank_d, part_d, part_h):
-    ''' Update a parametrized CAD model with the actual parameters '''
-    return 0
+
+def generate_cad_model(blank_d, part_d, part_h, part_3d_model):
+    '''
+    Update a parametrized CAD model with the actual parameters.
+    The CAD model is a CATPart file that can be updated with a CATIA macro script.
+    Run the CATIA macro script.
+    '''
+
+    '''
+    TODO: see https://stackoverflow.com/questions/34833407/run-a-catia-macro-with-a-python-script#36212094
+    import win32com.client
+    catapp = win32com.client.Dispatch('CATIA.Application')
+    catapp.StartCommand('Service_Layer/actions/a11_t2_part_3d_model.CATScript')
+    '''
+    
+    return part_3d_model
     
 
 """
 A12 Generate NC
 """
 
-def create_NC_model(part, radius, stepdown, feedrate):
+def create_NC_model(part_3d_model, tool_radius, stepdown, feedrate):
     ''' Update a parametrized NC model with the actual parameters '''
     return process
 
