@@ -25,9 +25,9 @@ dic [label="Digital Image\n Correlation System"]
 node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]
 Start
 t1 [label="Check Finished Flange"]
-t2 [label="Measure strain distribution"]
-t3 [label="Measure thickness profile"]
-t4 [label="Make fractographies"]
+t2 [label="Measure Strain Distribution"]
+t3 [label="Measure Thickness Profile"]
+t4 [label="Make Fractographies"]
 End
 
 # rules

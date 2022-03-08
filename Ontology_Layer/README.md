@@ -3,6 +3,12 @@
 
 ## Ontology Layer
 
+### Overview
+
+![](overview.png)
+
+![](data-tasks.png)
+
 ### Scope Model
 
 ![-0](Scope_Model/01_A0.png)
@@ -40,8 +46,3 @@ Enriched Data model:
 
 ![](Behaviour_Model/07_A3.gv.png)
 
-### Overview
-
-![](overview.png)
-
-![](data-tasks.png)
