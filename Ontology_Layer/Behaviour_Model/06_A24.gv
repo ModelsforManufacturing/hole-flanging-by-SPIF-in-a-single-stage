@@ -20,8 +20,8 @@ fea [label="FEA System"]
 # tasks definition
 node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]
 Start
-t1 [label="Extract strain distribution"]
-t2 [label="Find fracture location"]
+t1 [label="Extract Strain Distribution"]
+t2 [label="Find Fracture Location"]
 End
 
 # rules

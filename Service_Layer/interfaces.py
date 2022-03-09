@@ -15,22 +15,16 @@ def <task>(<input_1>, ...(<input_n>):
     if <constraint>:
         <action>
     else:
-        <action>
+        <another_action>
     return (<output_1>, ...<output_n>)
 
 """
 
 
-"""
-A11 Update Design Part
-"""
+""" A11 Update Design Part """
 
 def calculate_flange_height(blank_d, part_d, simul_issues_h):
-    '''
-    Update the flange height according to an equation.
-    The equation has been defined as a Python function.
-    Import and run the Python function.
-    '''
+    ''' Update the flange height according to an equation '''
     
     from Service_Layer.actions.a11_t1_flange_height import flange_height
     part_h = flange_height(part_d, blank_d)
@@ -44,62 +38,119 @@ def calculate_flange_height(blank_d, part_d, simul_issues_h):
 
 
 def generate_cad_model(blank_d, part_d, part_h, part_3d_model):
-    '''
-    Update a parametrized CAD model with the actual parameters.
-    The CAD model is a CATPart file that can be updated with a CATIA macro script.
-    Run the CATIA macro script.
-    '''
+    ''' Update a parametrized CAD model with the actual parameters '''
 
     '''
     TODO: see https://stackoverflow.com/questions/34833407/run-a-catia-macro-with-a-python-script#36212094
     import win32com.client
     catapp = win32com.client.Dispatch('CATIA.Application')
     catapp.StartCommand('Service_Layer/actions/a11_t2_part_3d_model.CATScript')
-    '''
-    
+    '''    
     return part_3d_model
     
 
-"""
-A12 Generate NC
-"""
 
-def create_NC_model(part_3d_model, tool_radius, stepdown, feedrate):
+""" A12 Generate NC """
+
+def create_nc_model(part_3d_model, tool_radius, stepdown, feedrate):
     ''' Update a parametrized NC model with the actual parameters '''
-    return process
+    process3d = 'pending action implementation'
+    return process3d
 
-def simulate_NC_model(process):
+def simulate_nc_model(process3d):
     ''' Analyse tool path to avoid tool collisions '''
-    return process
+    process3d = 'pending action implementation'
+    return process3d
 
-def generate_NC_code(process):
+def generate_nc_code(process3d):
     ''' Generate and export the APT code '''
+    apt_code = 'pending action implementation'
     return apt_code
 
 
-"""
-A21 Extract Tool Trajectory
-"""
+
+""" A21 Extract Tool Trajectory """
+
+def extract_tool_movements(apt_code):
+    ''' Read 'apt code' and extract tool movements as a list of data (feedrate, x, y, z) '''
+    feedrate_x_y_z = 'pending action implementation'
+    return feedrate_x_y_z
+
+def calculate_path_lengths_and_times(feedrate_x_y_z):
+    ''' For each tool movement, calculate the path length and time = lenght/feedrate '''
+    time_x_y_z = 'pending action implementation'
+    return time_x_y_z
+
+def write_results(time_x_y_z):
+    ''' Append results according to the simulation solver, e.g. Abaqus: ((time, X), (time, Y), (time, Z)) '''
+    toolpath_code = 'pending action implementation'
+    return toolpath_code
 
 
-"""
-A22 Simulate SPIF Process
-"""
+
+""" A22 Simulate SPIF Process """
+
+def create_simulation_model(hole_diameter, thickness, toolpath_code, elasticity_modulus, poisson_ratio, strain_stress_curve, anisotropy_coefficients):
+    ''' Update a parametrized Finite Element model with the actual parameters '''
+    analysis3d_model = 'pending action implementation'
+    return analysis3d_model
+
+def run_simulation_model(analysis3d_model):
+    ''' Run solver and confirm success (valid output file) '''
+    analysis3d_output = 'pending action implementation'
+    return analysis3d_output
 
 
-"""
-A23 Validate Simulation
-"""
+
+""" A23 Validate Simulation """
+
+def check_fracture(analysis3d_output):
+    ''' Represent strains in a FLD and compare with fracture curve to determine fracture location: wall, edge or none '''
+    simul_fracture_location = 'pending action implementation'
+    return simul_fracture_location
+
+def check_simulated_flange(analysis3d_output):
+    ''' Check that the forming tool formed the entire flange '''
+    simul_issues_h = 999999
+    return simul_issues_h
 
 
-"""
-A24 Analyze Simulation
-"""
+
+""" A24 Analyze Simulation """
+
+def extract_strain_distribution(analysis3d_output):
+    ''' Open '3d analysis output' and extract 'strain distribution' along the flange (to be analyzed in a FLD) '''
+    part_sim_strain = 'pending action implementation'
+    return part_sim_strain
+
+def find_fracture_location(simul_strain_distribution, fracture_curve):
+    ''' Construct a FLD and find fracture location: wall, edge or none '''
+    simul_fracture_location = 'pending action implementation'
+    return simul_fracture_location
 
 
-"""
-A3 Inspect Manufactured Part
-"""
+
+""" A3 Inspect Manufactured Part """
+
+def check_finished_flange(design_part_h, mfd_part_fail, mfd_part_h, mfd_part_fract, mfd_part_d):
+    ''' Verify that the forming tool has advanced far enough to form the entire flange '''
+    manuf_issues_h = 123456789
+    return manuf_issues_h
+
+def measure_strain_distribution(mfd_photos):
+    ''' Extract the strain distribution along the outer flange surface '''
+    analys_strain = 'pending action implementation'
+    return analys_strain
+
+def measure_thickness_profile(mfd_photos):
+    ''' Microscopic measurement of cut parts '''
+    analys_thickness = 'pending action implementation'
+    return analys_thickness
+
+def make_fractographies(mfd_photos):
+    ''' Make fractographies of the failure zone for failed tests '''
+    analys_fractogr = 'pending action implementation'
+    return analys_fractogr
 
 
 

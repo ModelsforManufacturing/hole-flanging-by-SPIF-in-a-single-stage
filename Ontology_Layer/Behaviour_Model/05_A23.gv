@@ -20,7 +20,7 @@ fea [label="FEA System"]
 node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]
 Start
 t1 [label="Check Fracture"]
-t2 [label="Check Finished Flange"]
+t2 [label="Check Simulated Flange"]
 End
 
 # rules

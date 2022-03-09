@@ -103,7 +103,7 @@ Example of a configuration file:
 
 ### `interfaces.py`
 
-Python functions to retrieve/save the instance data from/to `data.ini`.
+Python classes/functions to retrieve/save the instance data from/to `data.ini`.
 A backup of `data.ini` is made as `data_<timestamp>.ini` before running a simulation.
 
 
@@ -118,15 +118,11 @@ Directory that contains scripts or batch files to execute the tasks using extern
 #### Example 1: A Python script `a11_t1_flange_height.py` to calculate the flange height:
 
     def flange_height(part_diameter, blank_hole_diameter):
-        '''
-        A simple estimation for the final flange height of the design part.
-        '''
+        ''' A simple estimation for the final flange height of the design part '''
         return (part_diameter - blank_hole_diameter)/2
 
     def alternative_flange_height(part_diameter, blank_hole_diameter, simulated_flange_height):
-        '''
-        A simple correction for the final flange height of the design part given the flange height obtained in the numerical simulation.
-        '''
+        ''' A simple correction for the final flange height of the design part given the flange height obtained in the numerical simulation '''
         return simulated_flange_height
 
 
@@ -146,7 +142,7 @@ The function structure is generated from the definition of the `Task`:
         if <constraint>:
             <action>
         else:
-            <action>
+            <another_action>
         return (<output_1>, ...<output_n>)
 
 where `<action>` is a call to a script/batch file in `actions`.
@@ -154,11 +150,7 @@ where `<action>` is a call to a script/batch file in `actions`.
 #### Example:
 
     def calculate_flange_height(blank_d, part_d, simul_issues_h):
-        '''
-        Update the flange height according to an equation.
-        The equation has been defined as a Python function.
-        Import and run the Python function.
-        '''
+        ''' Update the flange height according to an equation '''
         
         from Service_Layer.actions.a11_t1_flange_height import flange_height
         part_h = flange_height(part_d, blank_d)

@@ -66,12 +66,12 @@ digraph datamodel {
     subgraph clusterParts {
         blank [label="{Blank Sheet | hole diameter \l}"]
         raw [label="{Raw Material | thickness \l}"]
-        part [label="{Design Part | diameter \l height \l tolerance \l 3d part \l}"]
+        part [label="{Design Part | diameter \l height \l 3d part \l}"]
         tool [label="{Forming Tool | radius \l}"]
 
-        elastic [label="{Elastic behaviour | elasticity modulus \l poisson ratio \l}"]
-        plastic [label="{Plastic behaviour | strain-stress curve \l anisotropy coefficients \l}"]
-        fracture [label="{Fracture behaviour | fracture curve \l}"]
+        elastic [label="{Elastic Behaviour | elasticity modulus \l poisson ratio \l}"]
+        plastic [label="{Plastic Behaviour | strain-stress curve \l anisotropy coefficients \l}"]
+        fracture [label="{Fracture Behaviour | fracture curve \l}"]
     }
     raw -> {elastic, plastic, fracture} [label="has"]
 
