@@ -133,7 +133,7 @@ def a21_t3_write_results(instance):
     """
     time_x_y_z = a21_t2_calculate_path_lengths_and_times(instance)
 
-    toolpath_code = service.write_results(time_x_y_z)
+    toolpath_code = service.write_results(instance, time_x_y_z)
 
     i = data.Instance(instance)
     i.trajectory.toolpath_code = toolpath_code
@@ -399,12 +399,12 @@ if __name__ == '__main__':
         elif task=='a21t1':
             print('Executing A21 Extract Tool Trajectory, T1 Extract Tool Movements')
             feedrate_x_y_z = a21_t1_extract_tool_movements(instance)
-            print('   Output: feedrate_x_y_z = %s' % feedrate_x_y_z)
+            print('   Output: feedrate_x_y_z = %s ...' % feedrate_x_y_z[:20])
             
         elif task=='a21t2':
             print('Executing A21 Extract Tool Trajectory, T2 Calculate Path Lengths and Times')
             time_x_y_z = a21_t2_calculate_path_lengths_and_times(instance)
-            print('   Output: time_x_y_z = %s' % time_x_y_z)
+            print('   Output: time_x_y_z = %s ...' % time_x_y_z[:20])
 
         elif task=='a21t3':
             print('Executing A21 Extract Tool Trajectory, T3 Write Results')

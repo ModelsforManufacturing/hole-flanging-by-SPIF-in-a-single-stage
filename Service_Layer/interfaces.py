@@ -73,17 +73,36 @@ def generate_nc_code(process3d):
 
 def extract_tool_movements(apt_code):
     ''' Read 'apt code' and extract tool movements as a list of data (feedrate, x, y, z) '''
-    feedrate_x_y_z = 'pending action implementation'
+    import io
+    
+    filename = 'Data_Layer/files/%s' % apt_code
+    f = open(filename, 'r')
+    apt = f.read()
+    f.close()
+    
+    from Service_Layer.actions.a21_t1_extract_tool_movements import apt2toolpath
+    feedrate_x_y_z = apt2toolpath(apt)
+
     return feedrate_x_y_z
 
 def calculate_path_lengths_and_times(feedrate_x_y_z):
     ''' For each tool movement, calculate the path length and time = lenght/feedrate '''
-    time_x_y_z = 'pending action implementation'
+
+    from Service_Layer.actions.a21_t2_calculate_path_lengths_and_times import toolpath2time
+    time_x_y_z = toolpath2time(feedrate_x_y_z)
+
     return time_x_y_z
 
-def write_results(time_x_y_z):
+def write_results(instance_name, time_x_y_z):
     ''' Append results according to the simulation solver, e.g. Abaqus: ((time, X), (time, Y), (time, Z)) '''
-    toolpath_code = 'pending action implementation'
+
+    from Service_Layer.actions.a21_t3_write_results import create_toolpath_files_for_abaqus
+    directory='Data_Layer/%s/' % instance_name
+    toolpath_files = create_toolpath_files_for_abaqus(time_x_y_z, directory)
+    
+    res = [i.replace(directory, '') for i in toolpath_files]
+    toolpath_code = '(%s, %s, %s, %s)' % (res[0], res[1], res[2], res[3])
+    
     return toolpath_code
 
 
