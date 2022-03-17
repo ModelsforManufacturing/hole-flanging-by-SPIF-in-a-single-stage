@@ -7,7 +7,7 @@ label="A24 Analyze Simulation"
 
 # inputs and outputs
 node [shape=record, style=filled, fillcolor=white, color=black]
-sim_res [label="{Simulation Results | 3d analysis output \l}"]
+sim_res [label="{Simulation Results | analysis output \l}"]
 fracture [label="{Fracture behaviour | fracture curve \l}"]
 part_sim_strain [label="{Simulated Part | strain distribution \l}"]
 part_sim_frac [label="{Simulated Part | fracture location \l}"]

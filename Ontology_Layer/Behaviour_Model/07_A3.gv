@@ -72,8 +72,8 @@ c4 [label="'manufactured part'.'failed'\n is not\n null"]
 
 # attaching constraints
 edge [dir=none, color=red, style=dashed]
-r1 -> c1 -> {des_part, mfd_part_h}
-r4 -> c4 -> {ana_fract, mfd_part_fail}
+{des_part, mfd_part_h} -> c1 -> t1
+{ana_fract, mfd_part_fail} -> c4 -> t4
 
 }
 

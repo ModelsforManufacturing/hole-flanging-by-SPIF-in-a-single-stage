@@ -7,7 +7,7 @@ label="A23 Validate Simulation"
 
 # inputs and outputs
 node [shape=record, style=filled, fillcolor=white, color=black]
-sim_res [label="{Simulation Results | 3d analysis output \l}"]
+sim_res [label="{Simulation Results | analysis output \l}"]
 sim_iss_h [label="{Simulation Issues | flange height \l}"]
 sim_part [label="{Simulated Part | fracture location \l}"]
 

@@ -6,11 +6,11 @@ label="A12 Generate NC"
 
 # inputs and outputs
 node [shape=record, style=filled, fillcolor=white, color=black]
-part [label="{Design Part | 3d part \l}"]
+part [label="{Design Part | part 3d \l}"]
 tool [label="{Forming Tool | radius \l}"]
 strategy [label="{Strategy | step down \l feedrate \l}"]
 program [label="{NC Program | apt code \l}"]
-nc [label="{NC Model | 3d process \l}"]
+nc [label="{NC Model | process 3d \l}"]
 
 # mechanisms
 node [shape=box, style=filled, fillcolor=white, color=green]

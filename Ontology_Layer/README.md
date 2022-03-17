@@ -28,6 +28,10 @@ Enriched Data model:
 ![](Data_Model/data_enriched.gv.png)
 
 
+### Semantic Model
+
+![](Semantic_Model/semantic.png)
+
 ### Behaviour Model
 
 ![](Behaviour_Model/legend.gv.png)

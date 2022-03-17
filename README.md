@@ -13,7 +13,7 @@ See [Ontology_Layer/README.md](Ontology_Layer/README.md)
 
 ## Data Layer
 
-### Complementary files
+### `files`
 
 All original complementary files required to perform the MfM simulation (CAD/CAM models, Finite Element models, tables with material properties, etc.) are stored in the directory `Data_Layer/files`.
 
@@ -38,7 +38,7 @@ Example of a configuration file:
     [Design Part]
     diameter = 96.8
     height = 0
-    3d part = "files/CATIA/Hole-flanged Part D95.8.CATpart"
+    part 3d = "files/CATIA/Hole-flanged Part D95.8.CATpart"
     
     [Forming Tool]
     radius = 10
@@ -63,7 +63,7 @@ Example of a configuration file:
     feedrate = 1000
     
     [NC Model]
-    3d process = 'files/CATIA/HF1-D58-R10.CATProcess'
+    process 3d = 'files/CATIA/HF1-D58-R10.CATProcess'
     
     [NC Program]
     apt code = 'files/CATIA/HF1-D58-R10_Hole-Flanging_Tool_R10.aptsource'
@@ -72,10 +72,10 @@ Example of a configuration file:
     toolpath code = ('files/CATIA/toolpath-X.csv', 'files/CATIA/toolpath-Y.csv', 'files/CATIA/toolpath-Z.csv')
     
     [Simulation Model]
-    3d analysis model = 'files/ABAQUS/model.py'
+    analysis model = 'files/ABAQUS/model.py'
     
     [Simulation Results]
-    3d analysis output = 'files/ABAQUS/model.odb'
+    analysis output = 'files/ABAQUS/model.odb'
     
     [Simulated Part]
     strain distribution = 
@@ -101,19 +101,9 @@ Example of a configuration file:
 
 
 
-### `interfaces.py`
-
-Python classes/functions to retrieve/save the instance data from/to `data.ini`.
-A backup of `data.ini` is made as `data_<timestamp>.ini` before running a simulation.
-
-
-
-
 ## Service Layer
 
-### `actions`
-
-Directory that contains scripts or batch files to execute the tasks using external software.
+Scripts or batch files to execute the tasks using external software.
 
 #### Example 1: A Python script `a11_t1_flange_height.py` to calculate the flange height:
 
@@ -131,9 +121,20 @@ Directory that contains scripts or batch files to execute the tasks using extern
 #### Example 3: A Python script to update the ABAQUS model and run the simulation.
 
 
-### `interfaces.py`
+## Interfaces
 
-Python functions to implement the Behaviour Model using the scripts/batch files in `actions`.
+An `interfaces` directory that contains:
+
+### `interfaces_data.py`
+
+Python classes/functions to retrieve/save the instance data from/to `data.ini`.
+A backup of `data.ini` is made as `data_<timestamp>.ini` before running a simulation.
+
+
+### `interfaces_service.py`
+
+Python functions to implement the Behaviour Model using the scripts/batch files in the `Service Layer`.
+
 There is a function for each `Task` of the `Elementary Activities`.
 The function structure is generated from the definition of the `Task`:
 
@@ -146,21 +147,6 @@ The function structure is generated from the definition of the `Task`:
         return (<output_1>, ...<output_n>)
 
 where `<action>` is a call to a script/batch file in `actions`.
-
-#### Example:
-
-    def calculate_flange_height(blank_d, part_d, simul_issues_h):
-        ''' Update the flange height according to an equation '''
-        
-        from Service_Layer.actions.a11_t1_flange_height import flange_height
-        part_h = flange_height(part_d, blank_d)
-        
-        if not part_h > simul_issues_h:
-        
-            from Service_Layer.actions.a11_t1_flange_height import alternative_flange_height
-            part_h = alternative_flange_height(part_d, blank_d, simul_issues_h)
-            
-        return part_h
 
     
 
@@ -244,7 +230,7 @@ Output:
 Output:
 
     Executing A11 Update Design Part, T1 Calculate flange height
-       flange height = 19.400000 mm
+        Output: flange height = 19.400000 mm
 
 
 
@@ -254,8 +240,8 @@ Output:
 
 Output:
 
-    Executing A11 Update Design Part, T2 Generate CAD Model
-       part 3d model = "files/CATIA/Hole-flanged Part D95.8.CATpart"
+    Executing A21 Extract Tool Trajectory, T3 Write Results
+        Output: toolpath_code = (toolpath-from.csv, toolpath-x.csv, toolpath-y.csv, toolpath-z.csv)
 
 
 

@@ -66,7 +66,7 @@ digraph datamodel {
     subgraph clusterParts {
         blank [label="{Blank Sheet | hole diameter \l}"]
         raw [label="{Raw Material | thickness \l}"]
-        part [label="{Design Part | diameter \l height \l 3d part \l}"]
+        part [label="{Design Part | diameter \l height \l part 3d \l}"]
         tool [label="{Forming Tool | radius \l}"]
 
         elastic [label="{Elastic Behaviour | elasticity modulus \l poisson ratio \l}"]
@@ -79,14 +79,14 @@ digraph datamodel {
     subgraph clusterNC {
         strategy [label="{Strategy | step down \l feedrate \l}"]
         program [label="{NC Program | apt code \l}"]
-        nc [label="{NC Model | 3d process \l}"]
+        nc [label="{NC Model | process 3d \l}"]
     }
 
     /* SPIF Simulation Model */
     subgraph clustersimulation {
         path [label="{Tool Trajectory | toolpath code \l}"]
-        sim_model [label="{Simulation Model | 3d analysis model \l}"]
-        sim_res [label="{Simulation Results | 3d analysis output \l}"]
+        sim_model [label="{Simulation Model | analysis model \l}"]
+        sim_res [label="{Simulation Results | analysis output \l}"]
         part_sim [label="{Simulated Part | strain distribution \l fracture location \l}"]
         iss_sim [label="{Simulation Issues | flange height \l}"]
     }
