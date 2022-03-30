@@ -151,12 +151,12 @@ where `<action>` is a call to a script/batch file in `actions`.
     
 
 
-## `run.py`
+## `main.py`
 
 Python script to perform a MfM simulation from the command line. Usage:
 
-    run.py --help
-    run.py --instance instance01 --task a11t1
+    main.py --help
+    main.py --instance instance01 --task a11t1
 
 The argument `--help` shows the full list of Activities and Tasks and instructions for use. 
 
@@ -170,11 +170,11 @@ Before running the task, a backup copy of `data.ini` is made.
 
 #### Example 1
 
-    run.py --help
+    main.py --help
 
 Output:
 
-    usage: run.py [-h] [--instance INSTANCE] [--task TASK]
+    usage: main.py [-h] [--instance INSTANCE] [--task TASK]
 
     MfM simulator: hole-flanging-by-SPIF-in-a-single-stage
     ------------------------------------------------------
@@ -212,7 +212,7 @@ Output:
 
     Example of usage:
 
-        run.py --instance instance01 --task a11t1
+        main.py --instance instance01 --task a11t1
 
     where 'instance01' is the directory that contains 'data.ini'
 
@@ -225,7 +225,7 @@ Output:
 
 #### Example 2
 
-    run.py --instance instance01 --task a11t1
+    main.py --instance instance01 --task a11t1
 
 Output:
 
@@ -236,7 +236,7 @@ Output:
 
 #### Example 3
 
-    run.py --instance instance01 --task a11t2
+    main.py --instance instance01 --task a11t2
 
 Output:
 
@@ -244,4 +244,9 @@ Output:
         Output: toolpath_code = (toolpath-from.csv, toolpath-x.csv, toolpath-y.csv, toolpath-z.csv)
 
 
+## `main_notebook.ipynb`
+
+Jupyter notebook to run in the cloud via mybinder:
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://github.com/ModelsforManufacturing/hole-flanging-by-SPIF-in-a-single-stage/HEAD?labpath=main_notebook.ipynb)
 

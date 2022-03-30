@@ -11,12 +11,7 @@ import textwrap     # Text wrapping and filling
 
 import interfaces.interfaces_service as service
 
-
-# using 'parser' for command-line options
-
-parser = argparse.ArgumentParser(
-    formatter_class=argparse.RawDescriptionHelpFormatter,
-    description=textwrap.dedent('''\
+description = textwrap.dedent('''\
         MfM simulator: hole-flanging-by-SPIF-in-a-single-stage
         ------------------------------------------------------
         List of Activities and Tasks:
@@ -53,16 +48,23 @@ parser = argparse.ArgumentParser(
         
         Example of usage:
         
-            run.py --instance instance01 --task a11t1
+            main.py --instance instance01 --task a11t1
             
         where 'instance01' is the directory that contains 'data.ini'
         
-        '''))
-parser.add_argument('--instance', default='instance01', help="Directory name that contains 'data.ini'")
-parser.add_argument('--task', default='a11t1', help="Task of an activity to be executed, example: --task a11t1")
-args = parser.parse_args()
+        ''')
+
 
 if __name__ == '__main__':
+    # using 'parser' for command-line options
+
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description=description)
+    parser.add_argument('--instance', default='instance01', help="Directory name that contains 'data.ini'")
+    parser.add_argument('--task', default='a11t1', help="Task of an activity to be executed, example: --task a11t1")
+    args = parser.parse_args()
+
     if args.task:
         instance = args.instance
         task = args.task
