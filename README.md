@@ -248,5 +248,6 @@ Output:
 
 Jupyter notebook to run in the cloud via mybinder:
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://github.com/ModelsforManufacturing/hole-flanging-by-SPIF-in-a-single-stage/HEAD?labpath=main_notebook.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](
+https://mybinder.org/v2/gh/ModelsforManufacturing/hole-flanging-by-SPIF-in-a-single-stage/HEAD?labpath=main_notebook.ipynb)
 
