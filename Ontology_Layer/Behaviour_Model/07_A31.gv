@@ -1,0 +1,67 @@
+digraph behaviourmodel {
+
+# activity title
+labelloc="t"
+label="A31 Process Test Data"
+
+# inputs and outputs
+node [shape=record, style=filled, fillcolor=white, color=black]
+t0 [label="{Blank Model|thickness\l}"];
+d0 [label="{Blank Model|hole diameter\l}"];
+part [label="{Part Model|diameter\l}"];
+h [label="{Test Results|is fractured\lflange height\l}"];
+her [label="{Test Results|hole expansion ratio\l}"];
+h_df [label="{Test Results|non-dimensional flange height\l}"];
+t_t0 [label="{Test Results|non-dimensional average thickness\l}"];
+
+# mechanisms
+node [shape=box, style=filled, fillcolor=white, color=green]
+m1 [label="Data Processing System"]
+
+# tasks definition
+node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]
+Start
+t1 [label="Calculate Hole\nExpansion Ratio"]
+t2 [label="Calculate Non-dimensional\nFlange Height"]
+t3 [label="Calculate Non-dimensional\nAverage Thickness"]
+End
+
+# rules
+node [shape=box, style="filled, rounded", fillcolor=white, color=blue]
+r1 [label="Only if no part\nfracture was found,\ncalculate HER=df/d0."]
+r2 [label="Only if no part\nfracture was found,\ncalculate h/df."]
+r3 [label="Either fracture was\nfound or not,\ncalculate the average\nthickness t by\nvolume conservation\nand return t/t0."]
+
+# attaching rules
+edge [dir=none, color=blue, style=dashed]
+t1 -> r1
+t2 -> r2
+t3 -> r3
+
+# task sequence
+edge [dir=forward, color=blue, fontcolor=blue, style=solid]
+Start -> {t1, t2, t3} -> End
+
+# attaching mechanisms
+edge [dir=none, color=green, style=dashed]
+m1 -> Start
+
+# attaching inputs and outputs
+edge [dir=forward, color=black, fontcolor=black, style=solid]
+{d0, part} -> t1 -> her
+{part, h} -> t2 -> h_df
+{d0, t0, part, h} -> t3 -> t_t0
+
+# constraints
+node [shape=ellipse, style=filled, fillcolor=white, color=red]
+c1 [label="is fractured = No"]
+c2 [label="is fractured = Yes/No"]
+
+# attaching constraints
+edge [dir=none, color=red, style=dashed]
+h -> c1 -> t1
+h -> c1 -> t2
+h -> c2 -> t3
+
+}
+

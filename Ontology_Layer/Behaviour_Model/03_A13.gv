@@ -2,29 +2,26 @@ digraph behaviourmodel {
 
 # activity title
 labelloc="t"
-label="A12 Calculate Tool Path"
+label="A13 Generate G-Code"
 
 # inputs and outputs
 node [shape=record, style=filled, fillcolor=white, color=black]
-blank [label="{Blank Model|thickness\l}"];
-part [label="{Part Model|diameter\lflange height\l}"];
-tool [label="{Forming Tool Model|radius\l}"];
-cond [label="{Forming Conditions|feed rate\lstep down\l}"];
 path [label="{Tool Path|toolpath code\l}"];
+prog [label="{NC Program|g-code\l}"];
 
 # mechanisms
 node [shape=box, style=filled, fillcolor=white, color=green]
-m1 [label="CAD-CAM System"]
+m1 [label="NC Post-processor"]
 
 # tasks definition
 node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]
 Start
-t1 [label="Calculate Tool Path"]
+t1 [label="Generate G-Code"]
 End
 
 # rules
 node [shape=box, style="filled, rounded", fillcolor=white, color=blue]
-r1 [label="Calculate the helical tool path\n(with tool radius compensation)\nto form the hole flange part\nalong the flange height\n(consider also the sheet thickness)"]
+r1 [label="Convert to G-code\nfor the EMCO VMC-200\nmachining center and\nappend program number,\ncoordinates system,\ntool charge, etc."]
 
 # attaching rules
 edge [dir=none, color=blue, style=dashed]
@@ -40,8 +37,8 @@ m1 -> t1
 
 # attaching inputs and outputs
 edge [dir=forward, color=black, fontcolor=black, style=solid]
-{blank, part, tool, cond} -> t1
-t1 -> path
+path -> t1
+t1 -> prog
 
 # constraints
 node [shape=ellipse, style=filled, fillcolor=white, color=red]

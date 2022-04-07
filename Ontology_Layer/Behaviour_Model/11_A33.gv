@@ -1,0 +1,66 @@
+digraph behaviourmodel {
+
+# activity title
+labelloc="t"
+label="A33 Induce Conclusions"
+
+# inputs and outputs
+node [shape=record, style=filled, fillcolor=white, color=black]
+lfr [label="{LFR|global lfr\llfr per tool\l}"];
+fld [label="{FLD|global fld\lfld per tool\lfld for successful tests\lfld for fractured tests\l}"];
+h [label="{Technological Parameters|flange height diagram\l}"];
+t [label="{Technological Parameters|average thickness diagram\l}"];
+clfr [label="{Conclusions|limit forming ratio\l}"];
+ch [label="{Conclusions|flange height\l}"];
+ct [label="{Conclusions|average thickness\l}"];
+ctR [label="{Conclusions|bending ratio\l}"];
+
+# mechanisms
+node [shape=box, style=filled, fillcolor=white, color=green]
+m1 [label="Data Processing System"]
+
+# tasks definition
+node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]
+Start
+t1 [label="Conclusions\nfor LFR"]
+t2 [label="Conclusions\nfor height"]
+t3 [label="Conclusions\nfor thickness"]
+t4 [label="Conclusions\nfor t0/R"]
+End
+
+# rules
+node [shape=box, style="filled, rounded", fillcolor=white, color=blue]
+r1 [label="Write conclusions\nfor LFR"]
+r2 [label="Write conclusions\nfor flange height"]
+r3 [label="Write conclusions\nfor average thickness"]
+r4 [label="Write conclusions\nfor bending ratio"]
+
+# attaching rules
+edge [dir=none, color=blue, style=dashed]
+t1 -> r1
+t2 -> r2
+t3 -> r3
+t4 -> r4
+
+# task sequence
+edge [dir=forward, color=blue, fontcolor=blue, style=solid]
+Start -> {t1, t2, t3, t4} -> End
+
+# attaching mechanisms
+edge [dir=none, color=green, style=dashed]
+m1 -> Start
+
+# attaching inputs and outputs
+edge [dir=forward, color=black, fontcolor=black, style=solid]
+lfr -> t1 -> clfr
+h -> t2 -> ch
+t -> t3 -> ct
+{lfr, fld, h, t} -> t4 -> ctR
+
+# constraints
+node [shape=ellipse, style=filled, fillcolor=white, color=red]
+
+# attaching constraints
+edge [dir=none, color=red, style=dashed]
+}
+

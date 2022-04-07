@@ -2,40 +2,36 @@ digraph behaviourmodel {
 
 # activity title
 labelloc="t"
-label="A11 Update Design Part"
+label="A11 Predict Part Height"
 
 # inputs and outputs
 node [shape=record, style=filled, fillcolor=white, color=black]
-part_d [label="{Design Part | diameter \l \l}"]
-part_h [label="{Design Part | height \l}"]
-part_m [label="{Design Part | model 3d \l}"]
-blank [label="{Blank Sheet | hole diameter \l}"]
-iss_sim [label="{Simulation Issues | flange height \l}"]
+blank [label="{Blank Model|thickness\lhole diameter\l}"];
+part0 [label="{Part Model|diameter\l}"];
+tool [label="{Forming Tool Model|radius\l}"];
+part [label="{Part Model|flange height\l}"];
 
 # mechanisms
 node [shape=box, style=filled, fillcolor=white, color=green]
-m1 [label="Equation Solver"]
+m1 [label="Math Equation Solver"]
 
 # tasks definition
 node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]
 Start
 t1 [label="Calculate flange height"]
-t2 [label="Generate CAD Model"]
 End
 
 # rules
 node [shape=box, style="filled, rounded", fillcolor=white, color=blue]
-r1 [label="Update the flange height\n according to an equation"]
-r2 [label="Update a parametrized\n CAD model with\n the actual parameters"]
+r1 [label="Estimate the theoretical\nflange height of the\npart to be manufactured\ntaking into account that the\nthickness distribution\nwill be no homogeneous"]
 
 # attaching rules
 edge [dir=none, color=blue, style=dashed]
 t1 -> r1
-t2 -> r2
 
 # task sequence
 edge [dir=forward, color=blue, fontcolor=blue, style=solid]
-Start -> t1 -> t2 -> End
+Start -> t1 -> End
 
 # attaching mechanisms
 edge [dir=none, color=green, style=dashed]
@@ -43,17 +39,13 @@ m1 -> t1
 
 # attaching inputs and outputs
 edge [dir=forward, color=black, fontcolor=black, style=solid]
-{part_d, blank, iss_sim} -> t1
-t1 -> part_h
-{part_d, blank, part_h, part_m} -> t2 -> part_m
+{blank, tool, part0} -> t1 -> part
 
 # constraints
 node [shape=ellipse, style=filled, fillcolor=white, color=red]
-c1 [label="part.h > issues.h"]
 
 # attaching constraints
 edge [dir=none, color=red, style=dashed]
-{part_h, iss_sim} -> c1 -> t1
 
 }
 

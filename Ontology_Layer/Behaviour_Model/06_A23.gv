@@ -2,52 +2,59 @@ digraph behaviourmodel {
 
 # activity title
 labelloc="t"
-label="A12 Calculate Tool Path"
+label="A23 Measure Specimen"
 
 # inputs and outputs
 node [shape=record, style=filled, fillcolor=white, color=black]
-blank [label="{Blank Model|thickness\l}"];
-part [label="{Part Model|diameter\lflange height\l}"];
-tool [label="{Forming Tool Model|radius\l}"];
-cond [label="{Forming Conditions|feed rate\lstep down\l}"];
-path [label="{Tool Path|toolpath code\l}"];
+test [label="{Test Results|is fractured\l}"];
+h [label="{Test Results|flange height\l}"];
+s [label="{Test Results|strain distribution\l}"];
 
 # mechanisms
 node [shape=box, style=filled, fillcolor=white, color=green]
-m1 [label="CAD-CAM System"]
+m1 [label="User Interface"]
 
 # tasks definition
 node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]
 Start
-t1 [label="Calculate Tool Path"]
+t1 [label="Measure Flange Height"]
+t2 [label="Measure Strain Distribution"]
 End
 
 # rules
 node [shape=box, style="filled, rounded", fillcolor=white, color=blue]
-r1 [label="Calculate the helical tool path\n(with tool radius compensation)\nto form the hole flange part\nalong the flange height\n(consider also the sheet thickness)"]
+r1 [label="Only if no part\nfracture was found,\nask for the measured\nflange height."]
+r2 [label="Either fracture was\nfound or not,\nask for the measured\nstrain distribution\nalong the flange."]
 
 # attaching rules
 edge [dir=none, color=blue, style=dashed]
 t1 -> r1
+t2 -> r2
 
 # task sequence
 edge [dir=forward, color=blue, fontcolor=blue, style=solid]
-Start -> t1 -> End
+Start -> {t1, t2} -> End
 
 # attaching mechanisms
 edge [dir=none, color=green, style=dashed]
-m1 -> t1
+m1 -> Start
 
 # attaching inputs and outputs
 edge [dir=forward, color=black, fontcolor=black, style=solid]
-{blank, part, tool, cond} -> t1
-t1 -> path
+test -> t1
+test -> t2
+t1 -> h
+t2 -> s
 
 # constraints
 node [shape=ellipse, style=filled, fillcolor=white, color=red]
+c1 [label="is fractured = No"]
+c2 [label="is fractured = Yes/No"]
 
 # attaching constraints
 edge [dir=none, color=red, style=dashed]
+test -> c1 -> t1
+test -> c2 -> t2
 
 }
 

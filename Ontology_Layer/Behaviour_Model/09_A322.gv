@@ -1,0 +1,71 @@
+digraph behaviourmodel {
+
+# activity title
+labelloc="t"
+label="A322 Plot FLD"
+
+# inputs and outputs
+node [shape=record, style=filled, fillcolor=white, color=black]
+str [label="{Test Results|strain distribution\l}"];
+frac [label="{Test Results|is fractured\l}"];
+prop [label="{Material Properties|fracture forming limit\l}"];
+tool [label="{Forming Tool Model|radius\l}", fillcolor=yellow];
+fld [label="{FLD|global fld\l}"];
+fld_tool [label="{FLD|fld per tool\l}"];
+fld_succ [label="{FLD|fld for successful tests\l}"];
+fld_fail [label="{FLD|fld for fractured tests\l}"];
+
+# mechanisms
+node [shape=box, style=filled, fillcolor=white, color=green]
+m1 [label="Data Processing System"]
+
+# tasks definition
+node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]
+Start
+t1 [label="Plot global FLD"]
+t2 [label="Plot FLD\nper tool"]
+t3 [label="Plot FLD for\nsuccessful tests"]
+t4 [label="Plot FLD for\nfractured tests"]
+End
+
+# rules
+node [shape=box, style="filled, rounded", fillcolor=white, color=blue]
+r1 [label="Plot the FLD for\n all specimens"]
+r2 [label="Plot a FLD for\nall specimens\ntested by the same\nforming tool"]
+r3 [label="Plot a FLD for\nall successful tests\nwith the minimum\npre-cut hole diameters"]
+r4 [label="Plot a FLD for\nall failed tests\nclosest to success"]
+
+# attaching rules
+edge [dir=none, color=blue, style=dashed]
+t1 -> r1
+t2 -> r2
+t3 -> r3
+t4 -> r4
+
+# task sequence
+edge [dir=forward, color=blue, fontcolor=blue, style=solid]
+Start -> {t1, t2, t3, t4} -> End
+
+# attaching mechanisms
+edge [dir=none, color=green, style=dashed]
+m1 -> Start
+
+# attaching inputs and outputs
+edge [dir=forward, color=black, fontcolor=black, style=solid]
+{str, prop} -> Start
+t1 -> fld
+tool -> t2 -> fld_tool
+frac -> t3 -> fld_succ
+frac -> t4 -> fld_fail
+
+# constraints
+node [shape=ellipse, style=filled, fillcolor=white, color=red]
+c1 [label="is fractured = No"]
+c2 [label="is fractured = Yes"]
+
+# attaching constraints
+edge [dir=none, color=red, style=dashed]
+t3 -> c1 -> frac
+t4 -> c2 -> frac
+}
+

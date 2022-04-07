@@ -1,52 +1,51 @@
 digraph behaviourmodel {
 
-
 # activity title
 labelloc="t"
-label="A23 Validate Simulation"
+label="A22 Perform Hole Flanging Test"
 
 # inputs and outputs
 node [shape=record, style=filled, fillcolor=white, color=black]
-sim_res [label="{Simulation Results | analysis output \l}"]
-sim_iss_h [label="{Simulation Issues | flange height \l}"]
-sim_part [label="{Simulated Part | fracture location \l}"]
-
+spec [label="{Specimen|is prepared\l}"];
+prog [label="{NC Program|g-code\l}"];
+test [label="{Test Results|is fractured\l}"];
 
 # mechanisms
 node [shape=box, style=filled, fillcolor=white, color=green]
-fea [label="FEA System"]
+m1 [label="User Interface"]
 
 # tasks definition
 node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]
 Start
-t1 [label="Check Fracture"]
-t2 [label="Check Simulated Flange"]
+t1 [label="Perform Hole Flanging Test"]
 End
 
 # rules
 node [shape=box, style="filled, rounded", fillcolor=white, color=blue]
-r1 [label="Represent strains in a FLD and\n compare with fracture curve\n to determine fracture location:\n wall, edge or none"]
-r2 [label="Check that the forming tool\n formed the entire flange"]
+r1 [label="Verify that the specimen is\nprepared, show information\nabout the NC program to be\nexecuted and, wait for the\nexperimental test, and\nask if fracture occurred."]
 
 # attaching rules
 edge [dir=none, color=blue, style=dashed]
 t1 -> r1
-t2 -> r2
 
 # task sequence
 edge [dir=forward, color=blue, fontcolor=blue, style=solid]
-Start -> t1
-t1 -> t2
-t2 -> End
+Start -> t1 -> End
 
 # attaching mechanisms
 edge [dir=none, color=green, style=dashed]
-fea -> Start
+m1 -> t1
 
 # attaching inputs and outputs
 edge [dir=forward, color=black, fontcolor=black, style=solid]
-sim_res -> {t1, t2}
-t1 -> sim_part
-t2 -> sim_iss_h
+{spec, prog} -> t1
+t1 -> test
+
+# constraints
+node [shape=ellipse, style=filled, fillcolor=white, color=red]
+
+# attaching constraints
+edge [dir=none, color=red, style=dashed]
+
 }
 
