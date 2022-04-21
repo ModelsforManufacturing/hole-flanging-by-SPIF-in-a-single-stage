@@ -27,311 +27,359 @@ import Service_Layer.interfaces as service
 
 def calculate_flange_height(instance):
     '''
-    Update the flange height according to an equation
+    Estimate the theoretical flange height of the part to be manufactured taking into account that the thickness distribution will be no homogeneous
 
     Arguments:
-        diameter_1 -- type: DesignPart.diameter
-        hole_diameter_2 -- type: BlankSheet.hole_diameter
-        flange_height_3 -- type: SimulationIssues.flange_height
+        thickness_1 -- type: BlankModel.thickness
+        hole_diameter_2 -- type: BlankModel.hole_diameter
+        radius_3 -- type: FormingToolModel.radius
+        diameter_4 -- type: PartModel.diameter
     Output:
-        height_1 -- type: DesignPart.height
+        flange_height_1 -- type: PartModel.flange_height
     '''
     i = data.Instance(instance)
-    diameter_1 = i.design_part.diameter
-    hole_diameter_2 = i.blank_sheet.hole_diameter
-    flange_height_3 = i.simulation_issues.flange_height
+    thickness_1 = i.blank_model.thickness
+    hole_diameter_2 = i.blank_model.hole_diameter
+    radius_3 = i.forming_tool_model.radius
+    diameter_4 = i.part_model.diameter
     
     # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
-    height_1 = service.calculate_flange_height(diameter_1, hole_diameter_2, flange_height_3)
+    flange_height_1 = service.calculate_flange_height(instance, thickness_1, hole_diameter_2, radius_3, diameter_4)
 
 
-    i.design_part.height = height_1
-    i.save()
-
-    return height_1
-
-
-def generate_cad_model(instance):
-    '''
-    Update a parametrized CAD model with the actual parameters
-
-    Arguments:
-        diameter_1 -- type: DesignPart.diameter
-        hole_diameter_2 -- type: BlankSheet.hole_diameter
-        height_3 -- type: DesignPart.height
-        model_3d_4 -- type: DesignPart.model_3d
-    Output:
-        model_3d_1 -- type: DesignPart.model_3d
-    '''
-    i = data.Instance(instance)
-    diameter_1 = i.design_part.diameter
-    hole_diameter_2 = i.blank_sheet.hole_diameter
-    height_3 = i.design_part.height
-    model_3d_4 = i.design_part.model_3d
-    
-    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
-    model_3d_1 = service.generate_cad_model(diameter_1, hole_diameter_2, height_3, model_3d_4)
-
-
-    i.design_part.model_3d = model_3d_1
-    i.save()
-
-    return model_3d_1
-
-
-def extract_tool_movements(instance):
-    '''
-    Read 'apt code' and extract tool movements as a list of data (feedrate, x, y, z)
-
-    Arguments:
-        apt_code_1 -- type: NCProgram.apt_code
-    Output:
-        feedrate_x_y_z_1 -- type: object
-    '''
-    i = data.Instance(instance)
-    apt_code_1 = i.nc_program.apt_code
-    
-    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
-    feedrate_x_y_z_1 = service.extract_tool_movements(apt_code_1)
-
-
-    # TO BE DEFINED: feedrate_x_y_z_1
-    i.save()
-
-    return feedrate_x_y_z_1
-
-
-def calculate_path_lengths_and_times(instance):
-    '''
-    For each tool movement, calculate the path length and time = lenght/feedrate
-
-    Arguments:
-        feedrate_x_y_z_1 -- type: object
-    Output:
-        time_x_y_z_1 -- type: object
-    '''
-    i = data.Instance(instance)
-    feedrate_x_y_z_1 = 0 # TO BE DEFINED
-    
-    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
-    time_x_y_z_1 = service.calculate_path_lengths_and_times(feedrate_x_y_z_1)
-
-
-    # TO BE DEFINED: time_x_y_z_1
-    i.save()
-
-    return time_x_y_z_1
-
-
-def write_results(instance):
-    '''
-    Append results according to the simulation solver, e.g. Abaqus: ((time, X), (time, Y), (time, Z))
-
-    Arguments:
-        time_x_y_z_1 -- type: object
-    Output:
-        toolpath_code_1 -- type: ToolTrajectory.toolpath_code
-    '''
-    i = data.Instance(instance)
-    time_x_y_z_1 = 0 # TO BE DEFINED
-    
-    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
-    toolpath_code_1 = service.write_results(time_x_y_z_1)
-
-
-    i.tool_trajectory.toolpath_code = toolpath_code_1
-    i.save()
-
-    return toolpath_code_1
-
-
-def create_nc_model(instance):
-    '''
-    Update a parametrized NC model with the actual parameters
-
-    Arguments:
-        part_3d_1 -- type: DesignPart.part_3d
-        radius_2 -- type: FormingTool.radius
-        step_down_3 -- type: Strategy.step_down
-        feedrate_4 -- type: Strategy.feedrate
-    Output:
-        process_3d_1 -- type: NCModel.process_3d
-    '''
-    i = data.Instance(instance)
-    part_3d_1 = i.design_part.part_3d
-    radius_2 = i.forming_tool.radius
-    step_down_3 = i.strategy.step_down
-    feedrate_4 = i.strategy.feedrate
-    
-    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
-    process_3d_1 = service.create_nc_model(part_3d_1, radius_2, step_down_3, feedrate_4)
-
-
-    i.nc_model.process_3d = process_3d_1
-    i.save()
-
-    return process_3d_1
-
-
-def simulate_nc_model(instance):
-    '''
-    Analyse tool path to avoid tool collisions
-
-    Arguments:
-        process_3d_1 -- type: NCModel.process_3d
-    Output:
-        process_3d_1 -- type: NCModel.process_3d
-    '''
-    i = data.Instance(instance)
-    process_3d_1 = i.nc_model.process_3d
-    
-    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
-    process_3d_1 = service.simulate_nc_model(process_3d_1)
-
-
-    i.nc_model.process_3d = process_3d_1
-    i.save()
-
-    return process_3d_1
-
-
-def generate_nc_code(instance):
-    '''
-    Generate and export the APT code
-
-    Arguments:
-        process_3d_1 -- type: NCModel.process_3d
-    Output:
-        apt_code_1 -- type: NCProgram.apt_code
-    '''
-    i = data.Instance(instance)
-    process_3d_1 = i.nc_model.process_3d
-    
-    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
-    apt_code_1 = service.generate_nc_code(process_3d_1)
-
-
-    i.nc_program.apt_code = apt_code_1
-    i.save()
-
-    return apt_code_1
-
-
-def extract_strain_distribution(instance):
-    '''
-    Open '3d analysis output' and extract 'strain distribution' along the flange (to be analyzed in a FLD)
-
-    Arguments:
-        analysis_output_1 -- type: SimulationResults.analysis_output
-    Output:
-        strain_distribution_1 -- type: SimulatedPart.strain_distribution
-    '''
-    i = data.Instance(instance)
-    analysis_output_1 = i.simulation_results.analysis_output
-    
-    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
-    strain_distribution_1 = service.extract_strain_distribution(analysis_output_1)
-
-
-    i.simulated_part.strain_distribution = strain_distribution_1
-    i.save()
-
-    return strain_distribution_1
-
-
-def find_fracture_location(instance):
-    '''
-    Construct a FLD and find fracture location: wall, edge or none
-
-    Arguments:
-        strain_distribution_1 -- type: SimulatedPart.strain_distribution
-        fracture_curve_2 -- type: Fracturebehaviour.fracture_curve
-    Output:
-        fracture_location_1 -- type: SimulatedPart.fracture_location
-    '''
-    i = data.Instance(instance)
-    strain_distribution_1 = i.simulated_part.strain_distribution
-    fracture_curve_2 = i.fracture_behaviour.fracture_curve
-    
-    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
-    fracture_location_1 = service.find_fracture_location(strain_distribution_1, fracture_curve_2)
-
-
-    i.simulated_part.fracture_location = fracture_location_1
-    i.save()
-
-    return fracture_location_1
-
-
-def check_fracture(instance):
-    '''
-    Represent strains in a FLD and compare with fracture curve to determine fracture location: wall, edge or none
-
-    Arguments:
-        analysis_output_1 -- type: SimulationResults.analysis_output
-    Output:
-        fracture_location_1 -- type: SimulatedPart.fracture_location
-    '''
-    i = data.Instance(instance)
-    analysis_output_1 = i.simulation_results.analysis_output
-    
-    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
-    fracture_location_1 = service.check_fracture(analysis_output_1)
-
-
-    i.simulated_part.fracture_location = fracture_location_1
-    i.save()
-
-    return fracture_location_1
-
-
-def check_simulated_flange(instance):
-    '''
-    Check that the forming tool formed the entire flange
-
-    Arguments:
-        analysis_output_1 -- type: SimulationResults.analysis_output
-    Output:
-        flange_height_1 -- type: SimulationIssues.flange_height
-    '''
-    i = data.Instance(instance)
-    analysis_output_1 = i.simulation_results.analysis_output
-    
-    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
-    flange_height_1 = service.check_simulated_flange(analysis_output_1)
-
-
-    i.simulation_issues.flange_height = flange_height_1
+    i.part_model.flange_height = flange_height_1
     i.save()
 
     return flange_height_1
 
 
-def check_finished_flange(instance):
+def calculate_global_lfr(instance):
     '''
-    Verify that the forming tool has advanced far enough to form the entire flange
+    For all unfractured specimens, calculate LFR=max(HER).
 
     Arguments:
-        height_1 -- type: DesignPart.height
-        failed_2 -- type: ManufacturedPart.failed
-        height_3 -- type: ManufacturedPart.height
-        fracture_location_4 -- type: ManufacturedPart.fracture_location
-        diameter_5 -- type: ManufacturedPart.diameter
+        hole_expansion_ratio_1 -- type: TestResults.hole_expansion_ratio
+        is_fractured_2 -- type: TestResults.is_fractured
     Output:
-        flange_height_1 -- type: ManufacturingIssues.flange_height
+        global_lfr_1 -- type: LFR.global_lfr
     '''
     i = data.Instance(instance)
-    height_1 = i.design_part.height
-    failed_2 = i.manufactured_part.failed
-    height_3 = i.manufactured_part.height
-    fracture_location_4 = i.manufactured_part.fracture_location
-    diameter_5 = i.manufactured_part.diameter
+    hole_expansion_ratio_1 = i.test_results.hole_expansion_ratio
+    is_fractured_2 = i.test_results.is_fractured
     
     # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
-    flange_height_1 = service.check_finished_flange(height_1, failed_2, height_3, fracture_location_4, diameter_5)
+    global_lfr_1 = service.calculate_global_lfr(instance, hole_expansion_ratio_1, is_fractured_2)
 
 
-    i.manufacturing_issues.flange_height = flange_height_1
+    i.lfr.global_lfr = global_lfr_1
+    i.save()
+
+    return global_lfr_1
+
+
+def calculate_lfr_per_tool(instance):
+    '''
+    For all unfractured specimens tested by the same forming tool, calculate LFR=max(HER).
+
+    Arguments:
+        hole_expansion_ratio_1 -- type: TestResults.hole_expansion_ratio
+        is_fractured_2 -- type: TestResults.is_fractured
+        radius_3 -- type: FormingToolModel.radius
+    Output:
+        lfr_per_tool_1 -- type: LFR.lfr_per_tool
+    '''
+    i = data.Instance(instance)
+    hole_expansion_ratio_1 = i.test_results.hole_expansion_ratio
+    is_fractured_2 = i.test_results.is_fractured
+    radius_3 = i.forming_tool_model.radius
+    
+    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
+    lfr_per_tool_1 = service.calculate_lfr_per_tool(instance, hole_expansion_ratio_1, is_fractured_2, radius_3)
+
+
+    i.lfr.lfr_per_tool = lfr_per_tool_1
+    i.save()
+
+    return lfr_per_tool_1
+
+
+def plot_global_fld(instance):
+    '''
+    Plot the FLD for all specimens
+
+    Arguments:
+        strain_distribution_1 -- type: TestResults.strain_distribution
+        fracture_forming_limit_2 -- type: MaterialProperties.fracture_forming_limit
+    Output:
+        global_fld_1 -- type: FLD.global_fld
+    '''
+    i = data.Instance(instance)
+    strain_distribution_1 = i.test_results.strain_distribution
+    fracture_forming_limit_2 = i.material_properties.fracture_forming_limit
+    
+    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
+    global_fld_1 = service.plot_global_fld(instance, strain_distribution_1, fracture_forming_limit_2)
+
+
+    i.fld.global_fld = global_fld_1
+    i.save()
+
+    return global_fld_1
+
+
+def plot_fld_per_tool(instance):
+    '''
+    Plot a FLD for all specimens tested by the same forming tool
+
+    Arguments:
+        strain_distribution_1 -- type: TestResults.strain_distribution
+        fracture_forming_limit_2 -- type: MaterialProperties.fracture_forming_limit
+        radius_3 -- type: FormingToolModel.radius
+    Output:
+        fld_per_tool_1 -- type: FLD.fld_per_tool
+    '''
+    i = data.Instance(instance)
+    strain_distribution_1 = i.test_results.strain_distribution
+    fracture_forming_limit_2 = i.material_properties.fracture_forming_limit
+    radius_3 = i.forming_tool_model.radius
+    
+    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
+    fld_per_tool_1 = service.plot_fld_per_tool(instance, strain_distribution_1, fracture_forming_limit_2, radius_3)
+
+
+    i.fld.fld_per_tool = fld_per_tool_1
+    i.save()
+
+    return fld_per_tool_1
+
+
+def plot_fld_for_successful_tests(instance):
+    '''
+    Plot a FLD for all successful tests with the minimum pre-cut hole diameters
+
+    Arguments:
+        strain_distribution_1 -- type: TestResults.strain_distribution
+        fracture_forming_limit_2 -- type: MaterialProperties.fracture_forming_limit
+        is_fractured_3 -- type: TestResults.is_fractured
+    Output:
+        fld_for_successful_tests_1 -- type: FLD.fld_for_successful_tests
+    '''
+    i = data.Instance(instance)
+    strain_distribution_1 = i.test_results.strain_distribution
+    fracture_forming_limit_2 = i.material_properties.fracture_forming_limit
+    is_fractured_3 = i.test_results.is_fractured
+    
+    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
+    fld_for_successful_tests_1 = service.plot_fld_for_successful_tests(instance, strain_distribution_1, fracture_forming_limit_2, is_fractured_3)
+
+
+    i.fld.fld_for_successful_tests = fld_for_successful_tests_1
+    i.save()
+
+    return fld_for_successful_tests_1
+
+
+def plot_fld_for_fractured_tests(instance):
+    '''
+    Plot a FLD for all failed tests closest to success
+
+    Arguments:
+        strain_distribution_1 -- type: TestResults.strain_distribution
+        fracture_forming_limit_2 -- type: MaterialProperties.fracture_forming_limit
+        is_fractured_3 -- type: TestResults.is_fractured
+    Output:
+        fld_for_fractured_tests_1 -- type: FLD.fld_for_fractured_tests
+    '''
+    i = data.Instance(instance)
+    strain_distribution_1 = i.test_results.strain_distribution
+    fracture_forming_limit_2 = i.material_properties.fracture_forming_limit
+    is_fractured_3 = i.test_results.is_fractured
+    
+    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
+    fld_for_fractured_tests_1 = service.plot_fld_for_fractured_tests(instance, strain_distribution_1, fracture_forming_limit_2, is_fractured_3)
+
+
+    i.fld.fld_for_fractured_tests = fld_for_fractured_tests_1
+    i.save()
+
+    return fld_for_fractured_tests_1
+
+
+def calculate_tool_path(instance):
+    '''
+    Calculate the helical tool path (with tool radius compensation) to form the hole flange part along the flange height (consider also the sheet thickness)
+
+    Arguments:
+        thickness_1 -- type: BlankModel.thickness
+        diameter_2 -- type: PartModel.diameter
+        flange_height_3 -- type: PartModel.flange_height
+        radius_4 -- type: FormingToolModel.radius
+        feed_rate_5 -- type: FormingConditions.feed_rate
+        step_down_6 -- type: FormingConditions.step_down
+    Output:
+        toolpath_code_1 -- type: ToolPath.toolpath_code
+    '''
+    i = data.Instance(instance)
+    thickness_1 = i.blank_model.thickness
+    diameter_2 = i.part_model.diameter
+    flange_height_3 = i.part_model.flange_height
+    radius_4 = i.forming_tool_model.radius
+    feed_rate_5 = i.forming_conditions.feed_rate
+    step_down_6 = i.forming_conditions.step_down
+    
+    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
+    toolpath_code_1 = service.calculate_tool_path(instance, thickness_1, diameter_2, flange_height_3, radius_4, feed_rate_5, step_down_6)
+
+
+    i.tool_path.toolpath_code = toolpath_code_1
+    i.save()
+
+    return toolpath_code_1
+
+
+def calculate_hole_expansion_ratio(instance):
+    '''
+    Only if no part fracture was found, calculate HER=df/d0.
+
+    Arguments:
+        hole_diameter_1 -- type: BlankModel.hole_diameter
+        diameter_2 -- type: PartModel.diameter
+        is_fractured_3 -- type: TestResults.is_fractured
+    Output:
+        hole_expansion_ratio_1 -- type: TestResults.hole_expansion_ratio
+    '''
+    i = data.Instance(instance)
+    hole_diameter_1 = i.blank_model.hole_diameter
+    diameter_2 = i.part_model.diameter
+    is_fractured_3 = i.test_results.is_fractured
+    
+    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
+    hole_expansion_ratio_1 = service.calculate_hole_expansion_ratio(instance, hole_diameter_1, diameter_2, is_fractured_3)
+
+
+    i.test_results.hole_expansion_ratio = hole_expansion_ratio_1
+    i.save()
+
+    return hole_expansion_ratio_1
+
+
+def calculate_non_dimensional_flange_height(instance):
+    '''
+    Only if no part fracture was found, calculate h/df.
+
+    Arguments:
+        diameter_1 -- type: PartModel.diameter
+        is_fractured_2 -- type: TestResults.is_fractured
+        flange_height_3 -- type: TestResults.flange_height
+    Output:
+        non_dimensional_flange_height_1 -- type: TestResults.non_dimensional_flange_height
+    '''
+    i = data.Instance(instance)
+    diameter_1 = i.part_model.diameter
+    is_fractured_2 = i.test_results.is_fractured
+    flange_height_3 = i.test_results.flange_height
+    
+    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
+    non_dimensional_flange_height_1 = service.calculate_non_dimensional_flange_height(instance, diameter_1, is_fractured_2, flange_height_3)
+
+
+    i.test_results.non_dimensional_flange_height = non_dimensional_flange_height_1
+    i.save()
+
+    return non_dimensional_flange_height_1
+
+
+def calculate_non_dimensional_average_thickness(instance):
+    '''
+    Only if no part fracture was found, calculate the average thickness t by volume conservation and return t/t0.
+
+    Arguments:
+        hole_diameter_1 -- type: BlankModel.hole_diameter
+        thickness_2 -- type: BlankModel.thickness
+        diameter_3 -- type: PartModel.diameter
+        is_fractured_4 -- type: TestResults.is_fractured
+        flange_height_5 -- type: TestResults.flange_height
+    Output:
+        non_dimensional_average_thickness_1 -- type: TestResults.non_dimensional_average_thickness
+    '''
+    i = data.Instance(instance)
+    hole_diameter_1 = i.blank_model.hole_diameter
+    thickness_2 = i.blank_model.thickness
+    diameter_3 = i.part_model.diameter
+    is_fractured_4 = i.test_results.is_fractured
+    flange_height_5 = i.test_results.flange_height
+    
+    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
+    non_dimensional_average_thickness_1 = service.calculate_non_dimensional_average_thickness(instance, hole_diameter_1, thickness_2, diameter_3, is_fractured_4, flange_height_5)
+
+
+    i.test_results.non_dimensional_average_thickness = non_dimensional_average_thickness_1
+    i.save()
+
+    return non_dimensional_average_thickness_1
+
+
+def plot_h_df(instance):
+    '''
+    Plot h/df vs. HER of successful hole-ﬂanged sheets
+
+    Arguments:
+        non_dimensional_flange_height_1 -- type: TestResults.non_dimensional_flange_height
+    Output:
+        flange_height_diagram_1 -- type: TechnologicalParameters.flange_height_diagram
+    '''
+    i = data.Instance(instance)
+    non_dimensional_flange_height_1 = i.test_results.non_dimensional_flange_height
+    
+    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
+    flange_height_diagram_1 = service.plot_h_df(instance, non_dimensional_flange_height_1)
+
+
+    i.technological_parameters.flange_height_diagram = flange_height_diagram_1
+    i.save()
+
+    return flange_height_diagram_1
+
+
+def plot_t_t0(instance):
+    '''
+    Plot t/t0 vs. HER of successful hole-ﬂanged sheets
+
+    Arguments:
+        non_dimensional_average_thickness_1 -- type: TestResults.non_dimensional_average_thickness
+    Output:
+        average_thickness_diagram_1 -- type: TechnologicalParameters.average_thickness_diagram
+    '''
+    i = data.Instance(instance)
+    non_dimensional_average_thickness_1 = i.test_results.non_dimensional_average_thickness
+    
+    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
+    average_thickness_diagram_1 = service.plot_t_t0(instance, non_dimensional_average_thickness_1)
+
+
+    i.technological_parameters.average_thickness_diagram = average_thickness_diagram_1
+    i.save()
+
+    return average_thickness_diagram_1
+
+
+def measure_flange_height(instance):
+    '''
+    Only if no part fracture was found, ask for the measured flange height.
+
+    Arguments:
+        is_fractured_1 -- type: TestResults.is_fractured
+    Output:
+        flange_height_1 -- type: TestResults.flange_height
+    '''
+    i = data.Instance(instance)
+    is_fractured_1 = i.test_results.is_fractured
+    
+    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
+    flange_height_1 = service.measure_flange_height(instance, is_fractured_1)
+
+
+    i.test_results.flange_height = flange_height_1
     i.save()
 
     return flange_height_1
@@ -339,124 +387,200 @@ def check_finished_flange(instance):
 
 def measure_strain_distribution(instance):
     '''
-    Extract the strain distribution along the outer flange surface
+    Either fracture was found or not, ask for the measured strain distribution along the flange.
 
     Arguments:
-        photos_1 -- type: ManufacturedPart.photos
+        is_fractured_1 -- type: TestResults.is_fractured
     Output:
-        strain_distribution_1 -- type: AnalyzedPart.strain_distribution
+        strain_distribution_1 -- type: TestResults.strain_distribution
     '''
     i = data.Instance(instance)
-    photos_1 = i.manufactured_part.photos
+    is_fractured_1 = i.test_results.is_fractured
     
     # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
-    strain_distribution_1 = service.measure_strain_distribution(photos_1)
+    strain_distribution_1 = service.measure_strain_distribution(instance, is_fractured_1)
 
 
-    i.analyzed_part.strain_distribution = strain_distribution_1
+    i.test_results.strain_distribution = strain_distribution_1
     i.save()
 
     return strain_distribution_1
 
 
-def measure_thickness_profile(instance):
+def perform_hole_flanging_test(instance):
     '''
-    Microscopic measurement of cut parts
+    Verify that the specimen is prepared, show information about the NC program to be executed and, wait for the experimental test, and ask if fracture occurred.
 
     Arguments:
-        photos_1 -- type: ManufacturedPart.photos
+        is_prepared_1 -- type: Specimen.is_prepared
+        g_code_2 -- type: NCProgram.g_code
     Output:
-        thickness_profile_1 -- type: AnalyzedPart.thickness_profile
+        is_fractured_1 -- type: TestResults.is_fractured
     '''
     i = data.Instance(instance)
-    photos_1 = i.manufactured_part.photos
+    is_prepared_1 = i.specimen.is_prepared
+    g_code_2 = i.nc_program.g_code
     
     # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
-    thickness_profile_1 = service.measure_thickness_profile(photos_1)
+    is_fractured_1 = service.perform_hole_flanging_test(instance, is_prepared_1, g_code_2)
 
 
-    i.analyzed_part.thickness_profile = thickness_profile_1
+    i.test_results.is_fractured = is_fractured_1
     i.save()
 
-    return thickness_profile_1
+    return is_fractured_1
 
 
-def make_fractographies(instance):
+def conclusions_for_lfr(instance):
     '''
-    Make fractographies of the failure zone for failed tests
+    Write conclusions for LFR
 
     Arguments:
-        photos_1 -- type: ManufacturedPart.photos
+        global_lfr_1 -- type: LFR.global_lfr
+        lfr_per_tool_2 -- type: LFR.lfr_per_tool
     Output:
-        fractographies_1 -- type: AnalyzedPart.fractographies
+        limit_forming_ratio_1 -- type: Conclusions.limit_forming_ratio
     '''
     i = data.Instance(instance)
-    photos_1 = i.manufactured_part.photos
+    global_lfr_1 = i.lfr.global_lfr
+    lfr_per_tool_2 = i.lfr.lfr_per_tool
     
     # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
-    fractographies_1 = service.make_fractographies(photos_1)
+    limit_forming_ratio_1 = service.conclusions_for_lfr(instance, global_lfr_1, lfr_per_tool_2)
 
 
-    i.analyzed_part.fractographies = fractographies_1
+    i.conclusions.limit_forming_ratio = limit_forming_ratio_1
     i.save()
 
-    return fractographies_1
+    return limit_forming_ratio_1
 
 
-def create_simulation_model(instance):
+def conclusions_for_height(instance):
     '''
-    Update a parametrized Finite Element model with the actual parameters
+    Write conclusions for flange height
 
     Arguments:
-        hole_diameter_1 -- type: BlankSheet.hole_diameter
-        thickness_2 -- type: RawMaterial.thickness
-        toolpath_code_3 -- type: ToolTrajectory.toolpath_code
-        elasticity_modulus_4 -- type: Elasticbehaviour.elasticity_modulus
-        poisson_ratio_5 -- type: Elasticbehaviour.poisson_ratio
-        strain_stress_curve_6 -- type: Plasticbehaviour.strain_stress_curve
-        anisotropy_coefficients_7 -- type: Plasticbehaviour.anisotropy_coefficients
+        flange_height_diagram_1 -- type: TechnologicalParameters.flange_height_diagram
     Output:
-        analysis_model_1 -- type: SimulationModel.analysis_model
+        flange_height_1 -- type: Conclusions.flange_height
     '''
     i = data.Instance(instance)
-    hole_diameter_1 = i.blank_sheet.hole_diameter
-    thickness_2 = i.raw_material.thickness
-    toolpath_code_3 = i.tool_trajectory.toolpath_code
-    elasticity_modulus_4 = i.elastic_behaviour.elasticity_modulus
-    poisson_ratio_5 = i.elastic_behaviour.poisson_ratio
-    strain_stress_curve_6 = i.plastic_behaviour.strain_stress_curve
-    anisotropy_coefficients_7 = i.plastic_behaviour.anisotropy_coefficients
+    flange_height_diagram_1 = i.technological_parameters.flange_height_diagram
     
     # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
-    analysis_model_1 = service.create_simulation_model(hole_diameter_1, thickness_2, toolpath_code_3, elasticity_modulus_4, poisson_ratio_5, strain_stress_curve_6, anisotropy_coefficients_7)
+    flange_height_1 = service.conclusions_for_height(instance, flange_height_diagram_1)
 
 
-    i.simulation_model.analysis_model = analysis_model_1
+    i.conclusions.flange_height = flange_height_1
     i.save()
 
-    return analysis_model_1
+    return flange_height_1
 
 
-def run_simulation_model(instance):
+def conclusions_for_thickness(instance):
     '''
-    Run solver and confirm success (valid output file)
+    Write conclusions for average thickness
 
     Arguments:
-        analysis_model_1 -- type: SimulationModel.analysis_model
+        average_thickness_diagram_1 -- type: TechnologicalParameters.average_thickness_diagram
     Output:
-        analysis_output_1 -- type: SimulationResults.analysis_output
+        average_thickness_1 -- type: Conclusions.average_thickness
     '''
     i = data.Instance(instance)
-    analysis_model_1 = i.simulation_model.analysis_model
+    average_thickness_diagram_1 = i.technological_parameters.average_thickness_diagram
     
     # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
-    analysis_output_1 = service.run_simulation_model(analysis_model_1)
+    average_thickness_1 = service.conclusions_for_thickness(instance, average_thickness_diagram_1)
 
 
-    i.simulation_results.analysis_output = analysis_output_1
+    i.conclusions.average_thickness = average_thickness_1
     i.save()
 
-    return analysis_output_1
+    return average_thickness_1
+
+
+def conclusions_for_t0_r(instance):
+    '''
+    Write conclusions for bending ratio
+
+    Arguments:
+        global_lfr_1 -- type: LFR.global_lfr
+        lfr_per_tool_2 -- type: LFR.lfr_per_tool
+        global_fld_3 -- type: FLD.global_fld
+        fld_per_tool_4 -- type: FLD.fld_per_tool
+        fld_for_successful_tests_5 -- type: FLD.fld_for_successful_tests
+        fld_for_fractured_tests_6 -- type: FLD.fld_for_fractured_tests
+        flange_height_diagram_7 -- type: TechnologicalParameters.flange_height_diagram
+        average_thickness_diagram_8 -- type: TechnologicalParameters.average_thickness_diagram
+    Output:
+        bending_ratio_1 -- type: Conclusions.bending_ratio
+    '''
+    i = data.Instance(instance)
+    global_lfr_1 = i.lfr.global_lfr
+    lfr_per_tool_2 = i.lfr.lfr_per_tool
+    global_fld_3 = i.fld.global_fld
+    fld_per_tool_4 = i.fld.fld_per_tool
+    fld_for_successful_tests_5 = i.fld.fld_for_successful_tests
+    fld_for_fractured_tests_6 = i.fld.fld_for_fractured_tests
+    flange_height_diagram_7 = i.technological_parameters.flange_height_diagram
+    average_thickness_diagram_8 = i.technological_parameters.average_thickness_diagram
+    
+    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
+    bending_ratio_1 = service.conclusions_for_t0_r(instance, global_lfr_1, lfr_per_tool_2, global_fld_3, fld_per_tool_4, fld_for_successful_tests_5, fld_for_fractured_tests_6, flange_height_diagram_7, average_thickness_diagram_8)
+
+
+    i.conclusions.bending_ratio = bending_ratio_1
+    i.save()
+
+    return bending_ratio_1
+
+
+def generate_g_code(instance):
+    '''
+    Convert to G-code for the EMCO VMC-200 machining center and append program number, coordinates system, tool charge, etc.
+
+    Arguments:
+        toolpath_code_1 -- type: ToolPath.toolpath_code
+    Output:
+        g_code_1 -- type: NCProgram.g_code
+    '''
+    i = data.Instance(instance)
+    toolpath_code_1 = i.tool_path.toolpath_code
+    
+    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
+    g_code_1 = service.generate_g_code(instance, toolpath_code_1)
+
+
+    i.nc_program.g_code = g_code_1
+    i.save()
+
+    return g_code_1
+
+
+def prepare_specimen(instance):
+    '''
+    Show information about the specimen to be prepared and ask for confirmation.
+
+    Arguments:
+        thickness_1 -- type: BlankModel.thickness
+        hole_diameter_2 -- type: BlankModel.hole_diameter
+        g_code_3 -- type: NCProgram.g_code
+    Output:
+        is_prepared_1 -- type: Specimen.is_prepared
+    '''
+    i = data.Instance(instance)
+    thickness_1 = i.blank_model.thickness
+    hole_diameter_2 = i.blank_model.hole_diameter
+    g_code_3 = i.nc_program.g_code
+    
+    # THIS FUNCTION MUST BE IMPLEMENTED IN 'Service_Layer/interfaces.py'
+    is_prepared_1 = service.prepare_specimen(instance, thickness_1, hole_diameter_2, g_code_3)
+
+
+    i.specimen.is_prepared = is_prepared_1
+    i.save()
+
+    return is_prepared_1
 
 
     

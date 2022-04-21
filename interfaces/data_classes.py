@@ -9,226 +9,188 @@ Definition of Objects (as classes) and its Paramenters for the Data Model.
 This file has been generated automatically.
 '''
 
-class BlankSheet:
+class BlankModel:
     ''' Description: TODO '''
-    def __init__(self, hole_diameter):
+    def __init__(self, thickness, hole_diameter):
         '''
         Keyword arguments:
-        hole_diameter -- (float) Units: mm. Diameter of the hole cut to the blank sheet.
-
-        '''
-        self.hole_diameter = hole_diameter
-
-
-class RawMaterial:
-    ''' Description: TODO '''
-    def __init__(self, thickness):
-        '''
-        Keyword arguments:
-        thickness -- (float) Units: mm. 
+        thickness -- (float) Units: mm. Initial sheet thickness.
+        hole_diameter -- (float) Units: mm. Diameter of the hole to be cut to the blank sheet.
 
         '''
         self.thickness = thickness
+        self.hole_diameter = hole_diameter
 
 
-class DesignPart:
+class PartModel:
     ''' Description: TODO '''
-    def __init__(self, diameter, height, part_3d):
+    def __init__(self, diameter, flange_height):
         '''
         Keyword arguments:
-        diameter -- (float) Units: mm. Diameter of the hole-flanged part measured in the inner surface.
-        height -- (float) Units: mm. Flange height measured from the external flat surface.
-        part_3d -- (string) Pathname of the file containing the 3D part model to be updated with ‘diameter’ and ‘height’ parameters.
+        diameter -- (float) Units: mm. Inner diameter of the hole-flanged part to be manufactured.
+        flange_height -- (float) Units: mm. Theoretical flange height measured from the external flat surface.
 
         '''
         self.diameter = diameter
-        self.height = height
-        self.part_3d = part_3d
+        self.flange_height = flange_height
 
 
-class FormingTool:
+class FormingToolModel:
     ''' Description: TODO '''
     def __init__(self, radius):
         '''
         Keyword arguments:
-        radius -- (float) Units: mm. 
+        radius -- (float) Units: mm. Forming tool radius.
 
         '''
         self.radius = radius
 
 
-class ElasticBehaviour:
-    ''' Description: TODO '''
-    def __init__(self, elasticity_modulus, poisson_ratio):
-        '''
-        Keyword arguments:
-        elasticity_modulus -- (float) Units: GPa. 
-        poisson_ratio -- (float) Units: adimensional. 
-
-        '''
-        self.elasticity_modulus = elasticity_modulus
-        self.poisson_ratio = poisson_ratio
-
-
-class PlasticBehaviour:
-    ''' Description: TODO '''
-    def __init__(self, strain_stress_curve, anisotropy_coefficients):
-        '''
-        Keyword arguments:
-        strain_stress_curve -- (string) 
-        anisotropy_coefficients -- (string) 
-
-        '''
-        self.strain_stress_curve = strain_stress_curve
-        self.anisotropy_coefficients = anisotropy_coefficients
-
-
-class FractureBehaviour:
-    ''' Description: TODO '''
-    def __init__(self, fracture_curve):
-        '''
-        Keyword arguments:
-        fracture_curve -- (string) 
-
-        '''
-        self.fracture_curve = fracture_curve
-
-
-class Strategy:
-    ''' Description: TODO '''
-    def __init__(self, step_down, feedrate):
-        '''
-        Keyword arguments:
-        step_down -- (float) Units: mm. 
-        feedrate -- (float) Units: mm/min. 
-
-        '''
-        self.step_down = step_down
-        self.feedrate = feedrate
-
-
-class NcProgram:
-    ''' Description: TODO '''
-    def __init__(self, apt_code):
-        '''
-        Keyword arguments:
-        apt_code -- (string) 
-
-        '''
-        self.apt_code = apt_code
-
-
-class NcModel:
-    ''' Description: TODO '''
-    def __init__(self, process_3d):
-        '''
-        Keyword arguments:
-        process_3d -- (string) 
-
-        '''
-        self.process_3d = process_3d
-
-
-class ToolTrajectory:
+class ToolPath:
     ''' Description: TODO '''
     def __init__(self, toolpath_code):
         '''
         Keyword arguments:
-        toolpath_code -- (string) 
+        toolpath_code -- (string) It can be APT, G-code, etc. It must contain the tool path coordinates, tool feed rate and step down.
 
         '''
         self.toolpath_code = toolpath_code
 
 
-class SimulationModel:
+class FormingConditions:
     ''' Description: TODO '''
-    def __init__(self, analysis_model):
+    def __init__(self, feed_rate, step_down):
         '''
         Keyword arguments:
-        analysis_model -- (string) 
+        feed_rate -- (float) Units: mm/min. Feed rate of the forming tool.
+        step_down -- (float) Units: mm. Step down of the forming tool following an helical tool path.
 
         '''
-        self.analysis_model = analysis_model
+        self.feed_rate = feed_rate
+        self.step_down = step_down
 
 
-class SimulationResults:
+class NcProgram:
     ''' Description: TODO '''
-    def __init__(self, analysis_output):
+    def __init__(self, g_code):
         '''
         Keyword arguments:
-        analysis_output -- (string) 
+        g_code -- (string) 
 
         '''
-        self.analysis_output = analysis_output
+        self.g_code = g_code
 
 
-class SimulatedPart:
+class Specimen:
     ''' Description: TODO '''
-    def __init__(self, strain_distribution, fracture_location):
+    def __init__(self, is_prepared):
         '''
         Keyword arguments:
+        is_prepared -- (string) 
+
+        '''
+        self.is_prepared = is_prepared
+
+
+class TestResults:
+    ''' Description: TODO '''
+    def __init__(self, is_fractured, flange_height, strain_distribution, hole_expansion_ratio, non_dimensional_flange_height, non_dimensional_average_thickness):
+        '''
+        Keyword arguments:
+        is_fractured -- (string) 
+        flange_height -- (float) Units: mm. Flange height of the produced part measured from the external flat surface.
         strain_distribution -- (string) 
-        fracture_location -- (string) 
+        hole_expansion_ratio -- (float) Units: non-dimensional. Initial to final diameter ratio, d0/df.
+        non_dimensional_flange_height -- (float) Units: non-dimensional. Flange height to final diameter ratio, h/df.
+        non_dimensional_average_thickness -- (float) Units: non-dimensional. Average thickness along the flange to initial thickness ratio, t/t0.
 
         '''
-        self.strain_distribution = strain_distribution
-        self.fracture_location = fracture_location
-
-
-class SimulationIssues:
-    ''' Description: TODO '''
-    def __init__(self, flange_height):
-        '''
-        Keyword arguments:
-        flange_height -- (float) Units: mm. 
-
-        '''
+        self.is_fractured = is_fractured
         self.flange_height = flange_height
-
-
-class ManufacturedPart:
-    ''' Description: TODO '''
-    def __init__(self, failed, fracture_location, height, diameter, photos):
-        '''
-        Keyword arguments:
-        failed -- (string) 
-        fracture_location -- (string) 
-        height -- (float) Units: mm. 
-        diameter -- (float) Units: mm. 
-        photos -- (string) 
-
-        '''
-        self.failed = failed
-        self.fracture_location = fracture_location
-        self.height = height
-        self.diameter = diameter
-        self.photos = photos
-
-
-class AnalyzedPart:
-    ''' Description: TODO '''
-    def __init__(self, strain_distribution, thickness_profile, fractographies):
-        '''
-        Keyword arguments:
-        strain_distribution -- (string) 
-        thickness_profile -- (string) 
-        fractographies -- (string) 
-
-        '''
         self.strain_distribution = strain_distribution
-        self.thickness_profile = thickness_profile
-        self.fractographies = fractographies
+        self.hole_expansion_ratio = hole_expansion_ratio
+        self.non_dimensional_flange_height = non_dimensional_flange_height
+        self.non_dimensional_average_thickness = non_dimensional_average_thickness
 
 
-class ManufacturingIssues:
+class MaterialProperties:
     ''' Description: TODO '''
-    def __init__(self, flange_height):
+    def __init__(self, fracture_forming_limit):
         '''
         Keyword arguments:
-        flange_height -- (float) Units: mm. 
+        fracture_forming_limit -- (string) Table with pairs of major and minor strain values
 
         '''
+        self.fracture_forming_limit = fracture_forming_limit
+
+
+class AnalysisResults:
+    ''' Description: TODO '''
+    def __init__(self, ):
+        '''
+        Keyword arguments:
+
+        '''
+
+
+class Lfr:
+    ''' Description: TODO '''
+    def __init__(self, global_lfr, lfr_per_tool):
+        '''
+        Keyword arguments:
+        global_lfr -- (float) Units: non-dimensional. Limit forming ratio from all experimental tests.
+        lfr_per_tool -- (float) Units: non-dimensional. Limit forming ratio from experimental tests using the same forming tool.
+
+        '''
+        self.global_lfr = global_lfr
+        self.lfr_per_tool = lfr_per_tool
+
+
+class Fld:
+    ''' Description: TODO '''
+    def __init__(self, global_fld, fld_per_tool, fld_for_successful_tests, fld_for_fractured_tests):
+        '''
+        Keyword arguments:
+        global_fld -- (string) Name of image file. FLD includes FFL curve and strain distribution for all tests.
+        fld_per_tool -- (string) 
+        fld_for_successful_tests -- (string) 
+        fld_for_fractured_tests -- (string) 
+
+        '''
+        self.global_fld = global_fld
+        self.fld_per_tool = fld_per_tool
+        self.fld_for_successful_tests = fld_for_successful_tests
+        self.fld_for_fractured_tests = fld_for_fractured_tests
+
+
+class TechnologicalParameters:
+    ''' Description: TODO '''
+    def __init__(self, flange_height_diagram, average_thickness_diagram):
+        '''
+        Keyword arguments:
+        flange_height_diagram -- (string) 
+        average_thickness_diagram -- (string) 
+
+        '''
+        self.flange_height_diagram = flange_height_diagram
+        self.average_thickness_diagram = average_thickness_diagram
+
+
+class Conclusions:
+    ''' Description: TODO '''
+    def __init__(self, limit_forming_ratio, flange_height, average_thickness, bending_ratio):
+        '''
+        Keyword arguments:
+        limit_forming_ratio -- (string) 
+        flange_height -- (string) 
+        average_thickness -- (string) 
+        bending_ratio -- (string) 
+
+        '''
+        self.limit_forming_ratio = limit_forming_ratio
         self.flange_height = flange_height
+        self.average_thickness = average_thickness
+        self.bending_ratio = bending_ratio
 
 
 

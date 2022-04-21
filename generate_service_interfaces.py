@@ -219,7 +219,9 @@ def generate_function(task, objects):
     ''' Return a string with the definition of a Python function '''
 
     # declare
-    function_name = task['name'].lower().replace(' ', '_')
+    function_name = task['name'].lower()
+    for xx in ' -/':
+        function_name = function_name.replace(xx, '_')
     declare = '%s(instance)' % (function_name)
     
     # comments
@@ -296,7 +298,7 @@ def generate_function(task, objects):
 
     # action
     args_counter = 0
-    action_args = ''
+    action_args = 'instance'                                        # by default
     for i in task['inputs']:
         if i in objects:                                            # external objects
             for a in objects[i]['parameter_name']:
@@ -305,8 +307,8 @@ def generate_function(task, objects):
         else:                                                       # internal objects
             args_counter += 1
             action_args = '%s, %s_%d' % (action_args, i, args_counter)
-    if len(action_args) > 0:
-        action_args = action_args[2:]  # remove the first ', ' from the argument list string
+#    if len(action_args) > 0:
+#        action_args = action_args[2:]  # remove the first ', ' from the argument list string
     action = '%s%s = service.%s(%s)' % (' '*indent, args, function_name, action_args)
 
     return template_function.substitute(
@@ -384,6 +386,7 @@ def generate_functions_from_file(graphviz_file):
 def generate_interfaces(graphviz_dir):
     s = ''
     for root, dirs, files in os.walk(graphviz_dir):
+        # TODO: order files alphabetically
         for name in files:
             if name.endswith((".gv", ".dot")):
                 graphviz_file = '%s/%s' % (graphviz_dir, name)

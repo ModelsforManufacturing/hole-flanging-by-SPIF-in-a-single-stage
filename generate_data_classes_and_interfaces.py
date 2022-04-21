@@ -10,7 +10,7 @@ import pydot        # Python interface to Graphviz's Dot language
 import csv          # CSV File Reading and Writing
 import shutil       # High-level file operations
 import datetime     # Basic date and time types
-
+import Ontology_Layer.parse_graphviz_data_model as pgv
 
 
 ### templates to write Python code
@@ -102,35 +102,6 @@ ${parser_str3}
 
 
 
-### read Graphviz and return a dictionary
-
-def get_nodes(graph):
-    ''' Find nodes in a graph and returns a dictionary with objects and parameters '''
-    nodes = {}
-    for subgraph in graph.get_subgraphs():
-        for n in subgraph.get_nodes():
-            name = n.get_name()
-            label = n.get_label()
-            for c in '"{}':                             # remove characters from label
-                label = label.replace(c, '')
-            
-            l = label.split('|')                        # find object
-            obj = l[0].strip()                          # remove whitespaces at start and end
-
-            if len(l) > 1:                              # object has parameters
-                param = label.split('|')[-1].split('\l')
-                param = [a.strip() for a in param]      # remove whitespaces at start and end
-                param = [a for a in param if a != '']   # remove empty strings
-            else:
-                param = False
-            
-            nodes[obj] = param
-    return nodes
-
-
-
-
-
 ### read CSV and return a dictionary
 
 def read_semantic_model(semantic_model_file):
@@ -142,11 +113,11 @@ def read_semantic_model(semantic_model_file):
             data.append(row)
     return data
 
-def get_semantic_data(data, object, parameter):
-    for row in data:
-        if (row['Object name'] == object) and (row['Parameter name'] == parameter):
+def get_semantic_data(semantic_data, data_object, parameter):
+    for row in semantic_data:
+        if (row['Object name'] == data_object) and (row['Parameter name'] == parameter):
             return (row['Type'], row['Description'])
-    return "Warning: Parameter's type not found!"
+    print("Warning: Parameter's type not found!")
 
 
 
@@ -196,22 +167,24 @@ def generate_names(nodes, semantic_data):
     param_counter = 1
     data = []
     for c in nodes: # c=class, p=parameter
+        node = nodes[c]
         class_name = c.title().replace(' ', '')     # remove withespaces in class name
         object_name = c.lower().replace(' ', '_')   # replace withespaces with '_' in parameter name
         params = [] # [param_name, param_type, param_description, param_n]
-        for p in nodes[c]:
-            param_name = p.lower().replace(' ', '_').replace('-', '_')
-            param_num = '%s_%s' % (param_name, param_counter) # add counter to parameter name
-            param_type, param_description = get_semantic_data(semantic_data, c, p)
-            pd = dict(
-                param = p,
-                param_name = param_name,
-                param_num = param_num,
-                param_type = param_type,
-                param_description = param_description,
-            )
-            params.append(pd)
-            param_counter += 1
+        if 'parameter' in node:
+            for p in node['parameter']:
+                param_name = p.lower().replace(' ', '_').replace('-', '_')
+                param_num = '%s_%s' % (param_name, param_counter) # add counter to parameter name
+                param_type, param_description = get_semantic_data(semantic_data, c, p)
+                pd = dict(
+                    param = p,
+                    param_name = param_name,
+                    param_num = param_num,
+                    param_type = param_type,
+                    param_description = param_description,
+                )
+                params.append(pd)
+                param_counter += 1
         cd = dict(
             concept = c,
             class_name = class_name,
@@ -226,7 +199,8 @@ def generate_classes(graphviz_file, semantic_file):
     ''' Return a string with the definition of all classes in Python '''
     graphs = pydot.graph_from_dot_file(graphviz_file)
     graph = graphs[0]
-    nodes = get_nodes(graph)
+    nodes = pgv.get_nodes(graph)
+    nodes = pgv.mfm_format(nodes)
     
     semantic_data = read_semantic_model(semantic_file)
     data = generate_names(nodes, semantic_data)
@@ -252,7 +226,8 @@ def generate_interfaces(graphviz_file, semantic_file):
     ''' Return a string with the definition of interfaces in Python '''
     graphs = pydot.graph_from_dot_file(graphviz_file)
     graph = graphs[0]
-    nodes = get_nodes(graph)
+    nodes = pgv.get_nodes(graph)
+    nodes = pgv.mfm_format(nodes)
     
     semantic_data = read_semantic_model(semantic_file)
     data = generate_names(nodes, semantic_data)
@@ -310,13 +285,12 @@ def backup_and_regenerate_interfaces(graphviz_file, semantic_file, python_file):
 
 
 if __name__ == '__main__':
-    backup_and_regenerate_classes(
-        'Ontology_Layer/Data_Model/data_enriched.gv', 
-        'Ontology_Layer/Semantic_Model/semantic.csv', 
+    data_enriched = 'Ontology_Layer/Data_Model/Data_Model_2_enriched.gv'
+    semantic = 'Ontology_Layer/Semantic_Model/Semantic_Model.csv'
+    
+    backup_and_regenerate_classes(data_enriched, semantic, 
         'interfaces/data_classes.py')
 
-    backup_and_regenerate_interfaces(
-        'Ontology_Layer/Data_Model/data_enriched.gv', 
-        'Ontology_Layer/Semantic_Model/semantic.csv', 
+    backup_and_regenerate_interfaces(data_enriched, semantic, 
         'interfaces/interfaces_data.py')
 
