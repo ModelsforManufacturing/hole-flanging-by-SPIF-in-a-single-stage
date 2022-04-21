@@ -4,7 +4,7 @@
 import re
 import shutil       # High-level file operations
 import datetime     # Basic date and time types
-import json
+import json         # JSON encoder and decoder
 
 
 def parse_idl(idl_file):
@@ -308,21 +308,27 @@ def idl2mfm(json_file):
                             p = means[parent_label]
                             if not 'child' in p:
                                 p['child'] = [child_label]
-                            else:
+                            elif not child_label in p['child']:
                                 p['child'].append(child_label)
 
                             c = means[child_label]
-                            c['parent'] = parent_label
+                            if not 'parent' in c:
+                                c['parent'] = [parent_label]
+                            elif not parent_label in c['parent']:
+                                c['parent'].append(parent_label)
 #                            print('Branch: means "%s" is parent of "%s"' % (parent_label, child_label))
                         else:
                             p = data_objects[parent_label]
                             if not 'child' in p:
                                 p['child'] = [child_label]
-                            else:
+                            elif not child_label in p['child']:
                                 p['child'].append(child_label)
 
                             c = data_objects[child_label]
-                            c['parent'] = parent_label
+                            if not 'parent' in c:
+                                c['parent'] = [parent_label]
+                            elif not parent_label in c['parent']:
+                                c['parent'].append(parent_label)
 #                            print('Branch: data object "%s" is parent of "%s"' % (parent_label, child_label))
 
             for j in join:
@@ -335,25 +341,35 @@ def idl2mfm(json_file):
                             p = means[parent_label]
                             if not 'child' in p:
                                 p['child'] = [child_label]
-                            else:
+                            elif not child_label in p['child']:
                                 p['child'].append(child_label)
 
                             c = means[child_label]
-                            c['parent'] = parent_label
+                            if not 'parent' in c:
+                                c['parent'] = [parent_label]
+                            elif not parent_label in c['parent']:
+                                c['parent'].append(parent_label)
 #                            print('Join: means "%s" is parent of "%s"' % (parent_label, child_label))
                         else:
-                            if not child_label in data_objects:
-                                d_obj = {child_label: {'parent': parent_label}}
+                            if not parent_label in data_objects:
+                                d_obj = {parent_label: {}}
                                 data_objects.update(d_obj)
-                            else:
-                                p = data_objects[parent_label]
-                                if not 'child' in p:
-                                    p['child'] = [child_label]
-                                else:
-                                    p['child'].append(child_label)
 
+                            p = data_objects[parent_label]
+                            if not 'child' in p:
+                                p['child'] = [child_label]
+                            elif not child_label in p['child']:
+                                p['child'].append(child_label)
+
+                            if not child_label in data_objects:
+                                d_obj = {child_label: {}}
+                                data_objects.update(d_obj)
+                                
                             c = data_objects[child_label]
-                            c['parent'] = parent_label
+                            if not 'parent' in c:
+                                c['parent'] = [parent_label]
+                            elif not parent_label in c['parent']:
+                                c['parent'].append(parent_label)
 #                            print('Join: data object "%s" is parent of "%s"' % (parent_label, child_label))
     
 
@@ -374,6 +390,12 @@ def generate_ontology(idl_file, json_file):
     json_file1 = '%s.json' % idl_file
     with open(json_file1, 'w') as f:
         json.dump(r, f)
+
+    # backup existing files before generating new ones
+    date = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    shutil.copyfile(
+        json_file,                          # JSON file
+        '%s_%s' % (json_file, date))        # JSON file backup
 
     # convert to MfM ontology and save to JSON file
     r = idl2mfm(json_file1)

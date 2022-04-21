@@ -18,30 +18,32 @@ def generate_data_model(json_file, gv_file):
     with open(json_file) as f:
         o = json.load(f)                    # ontology JSON format
         data = o['data']                    # Data Model
-        count = 1                           # counter for Data Objects
+        count = 0                           # counter for Data Objects
 
         # Firstable, find data objects
         store_do = {}                       # to save data objects and their identifiers
         for i in data:
+            count += 1
             do_id = 'o%d' % count           # identifier: o1, o2, o3...
-            print('Data Object: %s "%s"' % (do_id, i))
+            print('Data Object %s: "%s"' % (do_id, i))
             graph.add_node(             # create GraphViz's node for Data Object
                 pydot.Node(do_id, label = i))
             store_do.update({i: do_id})
-            count += 1
 
-        print('There are %s Data objects' %count)
+        print('\nThere are %s Data objects:\n' % (count))
     
         # Then, find relations between data objects
         count = 1
         for i in data:
             do = data[i]                        # Data Object
+            print(i)
             if 'parent' in do:
-                parent = do['parent']
-                parent_id = store_do[parent]    # find identifier
-                print('  parent: "%s" is %s' % (parent, parent_id))
-                graph.add_edge(
-                    pydot.Edge('%s' % parent_id, 'o%d' % count))
+                parents = do['parent']
+                print('  parents:')
+                for p in parents:
+                    print('    - %s' % p)
+                    graph.add_edge(
+                        pydot.Edge('%s' % store_do[p], 'o%d' % count))
             if 'child' in do:
                 childs = do['child']
                 print('  childs:')
@@ -110,7 +112,7 @@ def test_summary_ontology(json_file):
 
 if __name__ == '__main__':
     json_file = 'ontology.json'
-    gv_file = 'Data_Model/Data_Model_0_(generated_from_Scope).gv'
+    gv_file = 'Data_Model/Data_Model.gv'
 
 #    test_summary_ontology(json_file)
     generate_data_model(json_file, gv_file)
