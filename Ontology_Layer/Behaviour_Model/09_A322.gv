@@ -52,11 +52,10 @@ m1 -> Start
 
 # attaching inputs and outputs
 edge [dir=forward, color=black, fontcolor=black, style=solid]
-{str, prop} -> Start
-t1 -> fld
-tool -> t2 -> fld_tool
-frac -> t3 -> fld_succ
-frac -> t4 -> fld_fail
+{str, prop} -> t1 -> fld
+{str, prop, tool} -> t2 -> fld_tool
+{str, prop, frac} -> t3 -> fld_succ
+{str, prop, frac} -> t4 -> fld_fail
 
 # constraints
 node [shape=ellipse, style=filled, fillcolor=white, color=red]
@@ -65,7 +64,7 @@ c2 [label="is fractured = Yes"]
 
 # attaching constraints
 edge [dir=none, color=red, style=dashed]
-t3 -> c1 -> frac
-t4 -> c2 -> frac
+frac -> c1 -> t3
+frac -> c2 -> t4
 }
 

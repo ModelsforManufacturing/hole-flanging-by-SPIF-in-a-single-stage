@@ -1,0 +1,46 @@
+digraph datamodel {
+colorscheme=pastel19;
+node [color=black, fillcolor=white, shape=record, style="filled, rounded"];
+
+blank [label="Blank Model"];
+part [label="Part Model"];
+tool [label="Forming Tool Model"];
+path [label="Tool Path"];
+cond [label="Forming Conditions"];
+prog [label="NC Program"];
+spec [label=Specimen];
+test [label="Test Results"];
+prop [label="Material Properties"];
+analy [label="Analysis Results"];
+lfr [label=LFR];
+fld [label=FLD];
+tech [label="Technological Parameters"];
+concl [label=Conclusions];
+
+analy -> {lfr, fld, tech} [label="has"];
+
+{blank, part, tool} -> path [label="addresses"]
+{path, cond} -> prog [label="generates"]
+blank -> spec [label="defines"]
+{prog, spec} -> test [label="aims"]
+{prog, spec} -> analy [label="aims"]
+{test, prop} -> analy [label="addresses"]
+{test, analy} -> concl [label="leads to"]
+
+node [fillcolor=yellow1]
+
+blank [label="{Blank Model|thickness\lhole diameter\l}"];
+part [label="{Part Model|diameter\lflange height\l}"];
+tool [label="{Forming Tool Model|radius\l}"];
+path [label="{Tool Path|toolpath code\l}"];
+cond [label="{Forming Conditions|feed rate\lstep down\l}"];
+prog [label="{NC Program|g-code\l}"];
+spec [label="{Specimen|is prepared\l}"];
+test [label="{Test Results|is fractured\lflange height\lstrain distribution\lhole expansion ratio\lnon-dimensional flange height\lnon-dimensional average thickness\l}"];
+prop [label="{Material Properties|fracture forming limit\l}"];
+lfr [label="{LFR|global lfr\llfr per tool\l}"];
+fld [label="{FLD|global fld\lfld per tool\lfld for successful tests\lfld for fractured tests\l}"];
+tech [label="{Technological Parameters|flange height diagram\laverage thickness diagram\l}"];
+concl [label="{Conclusions|limit forming ratio\lflange height\laverage thickness\lbending ratio\l}"];
+
+}

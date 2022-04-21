@@ -53,6 +53,6 @@ c1 [label="is fractured = No"]
 
 # attaching constraints
 edge [dir=none, color=red, style=dashed]
-Start -> c1 -> frac
+frac -> c1 -> {t1, t2}
 }
 

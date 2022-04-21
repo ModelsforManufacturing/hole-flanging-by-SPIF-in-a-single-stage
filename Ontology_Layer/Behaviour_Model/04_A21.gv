@@ -8,6 +8,8 @@ label="A21 Prepare Specimen"
 node [shape=record, style=filled, fillcolor=white, color=black]
 blank [label="{Blank Model|thickness\lhole diameter\l}"];
 spec [label="{Specimen|is prepared\l}"];
+prog [label="{NC Program|g-code\l}", fillcolor=yellow];
+
 
 # mechanisms
 node [shape=box, style=filled, fillcolor=white, color=green]
@@ -37,14 +39,16 @@ m1 -> t1
 
 # attaching inputs and outputs
 edge [dir=forward, color=black, fontcolor=black, style=solid]
-blank -> t1
+{blank, prog} -> t1
 t1 -> spec
 
 # constraints
 node [shape=ellipse, style=filled, fillcolor=white, color=red]
+c1 [label="after 'g-code'\nis generated"]
 
 # attaching constraints
 edge [dir=none, color=red, style=dashed]
+prog -> c1 -> t1
 
 }
 
