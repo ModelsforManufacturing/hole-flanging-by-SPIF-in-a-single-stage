@@ -114,7 +114,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="0.52347701"
      inkscape:cx="1022.9676"
-     inkscape:cy="378.2401"
+     inkscape:cy="378.24011"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -190,7 +190,7 @@
          id="tspan4230"
          style="font-size:12.7px;fill:#0000ff;stroke-width:0.264583"
          x="26.886471"
-         y="310.18869">instance01/data.ini</tspan></text>
+         y="310.18869">&lt;instance&gt;/data.ini</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:9.87778px;line-height:1.25;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, ';stroke-width:0.264583;fill:#ff0000"
@@ -250,18 +250,18 @@
          id="tspan4230-6"
          style="font-size:12.7px;fill:#0000ff;stroke-width:0.264583"
          x="301.92792"
-         y="267.3783">AA7075-O_FFL.csv</tspan></text>
+         y="267.3783">FFL.csv</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:12.7px;line-height:1.25;font-family:'Times New Roman';-inkscape-font-specification:'Times New Roman, ';stroke-width:0.264583"
-       x="153.94232"
+       x="206.85901"
        y="360.35349"
        id="text4232-3-5"><tspan
          sodipodi:role="line"
          id="tspan4230-6-3"
          style="font-size:12.7px;fill:#0000ff;stroke-width:0.264583"
-         x="153.94232"
-         y="360.35349">analysis_and_conclusions/data.ini</tspan></text>
+         x="206.85901"
+         y="360.35349">results/results.ini</tspan></text>
     <path
        style="fill:none;stroke:#0000ff;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1Lend)"
        d="M 300.3538,263.48377 262.35223,248.33093"

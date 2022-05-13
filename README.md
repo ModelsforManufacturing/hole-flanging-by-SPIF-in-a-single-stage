@@ -3,45 +3,85 @@
 
 ## 3-Layer Model Overview
 
-Warning: the following figure is obsolete.
-
-![](overview.png)
+![](packages.png)
 
 
 ## Ontology Layer
 
 See [Ontology_Layer/README.md](Ontology_Layer/README.md)
 
+The following files are automatically generated from the model defined in the Ontology Layer:
+
+- `interfaces/data_interface.py`
+- `interfaces/behaviour_interface.py`
+- `interfaces/mediating_controller.py`
+- `Data_Layer/data.py`
+
+## Interfaces
+
+### `interfaces/data_interface.py`
+
+Python interfaces with instructions for implementing the Data Model.
+
+
+### `interfaces/behaviour_interface.py`
+
+Python interfaces with instructions for implementing the Behaviour Model.
+
+There is a interface for each `Task` of the `Elementary Activities`.
+The interface structure is generated from the definition of the `Task` as:
+
+    def <task>(
+            <input_1>: type, 
+            ...
+            <input_n>: type
+            ) -> output type:
+        '''
+        Comments section with instructions for implementing the interface:
+        <rule>
+        <input>
+        <output>
+        <constraint>
+        '''
+        pass
+
+### `interfaces/mediating_controller.py`
+
+The Behaviour Layer is completely decoupled from the Data Layer such that both can interact only via the mediating controller.
+
 
 ## Data Layer
 
-### `files`
+### `Data_Layer/files`
 
-All original complementary files required to perform the MfM simulation (CAD/CAM models, Finite Element models, tables with material properties, etc.) are stored in the directory `Data_Layer/files`.
+Directory that contains all original complementary files required to perform the MfM simulation (CAD/CAM models, Finite Element models, tables with material properties, etc.).
 
 
-### `data.ini`
+### `Data_Layer/<instance_name>/data.ini`
 
-A directory `Data_Layer/<instance_name>` must be created for every instance that must contain a configuration file `data.ini` with all the instance data. 
+Configuration file with all the instance data. 
 Example of a configuration file:
 
     [Blank Model]
     thickness = 1.6
-    hole diameter = 63.5
+    hole diameter = 64.5
     
     [Part Model]
     diameter = 95.8
-    flange height = 16.15
+    flange height = 15.65
     
     [Forming Tool Model]
     radius = 6.0
     
-    [Tool Path]
-    toolpath code = toolpath.csv
-    
     [Forming Conditions]
     feed rate = 1000.0
     step down = 0.2
+    
+    [Material Properties]
+    fracture forming limit = files/fracture_forming_limit.csv
+    
+    [Tool Path]
+    toolpath code = toolpath.csv
     
     [NC Program]
     g-code = nc-program.gcode
@@ -50,89 +90,70 @@ Example of a configuration file:
     is prepared = y
     
     [Test Results]
-    is fractured = y
-    flange height = 0.0
+    non-dimensional flange height = 0.1931106471816284
+    is fractured = n
+    hole expansion ratio = 1.4852713178294574
+    non-dimensional average thickness = 0.8459459459459459
     strain distribution = strain.csv
-    hole expansion ratio = 0.0
-    non-dimensional flange height = 0.0
-    non-dimensional average thickness = 0.0
-    
-    [Material Properties]
-    fracture forming limit = files/fracture_forming_limit.csv
-    
-    [Analysis Results]
+    flange height = 18.5
     
     [LFR]
-    global lfr = 0.5991735537190083
-    lfr per tool = 0.0
+    lfr per tool = 1.4852713178294574
+    global lfr = 1.4852713178294574
     
     [FLD]
-    global fld = FLD.png
-    fld per tool = TBD
-    fld for successful tests = TBD
-    fld for fractured tests = TBD
+    fld per tool = FLD_R6.png
+    fld for fractured tests = FLD_failed_tests.png
+    fld for successful tests = FLD_successful_tests.png
+    global fld = FLD_successful_tests.png
     
     [Technological Parameters]
-    flange height diagram = TBD
-    average thickness diagram = TBD
+    flange height diagram = diagram_HER-h.png
+    average thickness diagram = diagram_HER-t.png
     
     [Conclusions]
-    limit forming ratio = 
-    flange height = 
-    average thickness = 
-    bending ratio = 
+    bending ratio = test
+    flange height = test
+    limit forming ratio = test
+    average thickness = test
 
+
+### `Data_Layer/data.py`
+
+Implementation of `interfaces/data_interface.py` to retrieve/save the instance data from/to `Data_Layer/<instance_name>/data.ini`.
+
+`data.ini` is backed up as `data_<timestamp>.ini` before running a simulation.
 
 
 ## Service Layer
 
-Scripts or batch files to execute the tasks using external software. Examples:
+### `Service_Layer/behaviour.py`
+
+Implementation of `interfaces/behaviour_interface.py` that can call scripts or batch files to execute the tasks using external software. Examples:
 
 1. A Python script to calculate the flange height
-2. A CATIA VBA script to update the flange height of the design part.
+2. A CATIA VBA script to update the flange height of the design part. 
 3. A Python script to update the ABAQUS model and run the simulation.
 
 
-## Interfaces
+### `Service_Layer/visualization.py`
 
-An `interfaces` directory that contains:
+`Visualization` class with methods to display information of data instances.
 
-### `interfaces_data.py`
+### `Service_Layer/simulation.py`
 
-Python classes/functions to retrieve/save the instance data from/to `data.ini`.
-A backup of `data.ini` is made as `data_<timestamp>.ini` before running a simulation.
-
-
-### `interfaces_service.py`
-
-Python functions to implement the Behaviour Model using the scripts/batch files in the `Service Layer`.
-
-There is a function for each `Task` of the `Elementary Activities`.
-The function structure is generated from the definition of the `Task`:
-
-    def <task>(<input_1>, ...(<input_n>):
-        ''' <rule> '''
-        if <constraint>:
-            <action>
-        else:
-            <another_action>
-        return (<output_1>, ...<output_n>)
-
-where `<action>` is a call to a script/batch file in `actions`.
-
-    
+`Simulation` class with methods to perform a MfM simulation from the command line.
 
 
-## `simul.py`
+## `main.py`
 
-Python script to perform a MfM simulation from the command line.
+Python script to call `Service_Layer/simulation.py`.
 
 
+## `main.ipynb`
 
-## `simul.ipynb`
-
-Jupyter notebook to run `simul.py` in the cloud via mybinder:
+Jupyter notebook to run `main.py` in the cloud via mybinder:
 
 [![Binder](https://mybinder.org/badge_logo.svg)](
-https://mybinder.org/v2/gh/ModelsforManufacturing/hole-flanging-by-SPIF-in-a-single-stage/HEAD?labpath=simul.ipynb)
+https://mybinder.org/v2/gh/ModelsforManufacturing/hole-flanging-by-SPIF-in-a-single-stage/HEAD?labpath=main.ipynb)
 

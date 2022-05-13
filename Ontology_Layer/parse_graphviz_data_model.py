@@ -278,7 +278,9 @@ def mfm_format(nodes):
         new_nodes.update({obj_name: obj_values})
 
     return new_nodes
-    
+
+
+
 
 if __name__ == '__main__':
     gv_path = pathlib.Path('Data_Model/Data_Model.gv')

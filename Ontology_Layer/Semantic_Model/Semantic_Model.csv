@@ -4,28 +4,28 @@ Blank Model,hole diameter,float,Units: mm. Diameter of the hole to be cut to the
 Part Model,diameter,float,Units: mm. Inner diameter of the hole-flanged part to be manufactured.
 Part Model,flange height,float,Units: mm. Theoretical flange height measured from the external flat surface.
 Forming Tool Model,radius,float,Units: mm. Forming tool radius.
-Tool Path,toolpath code,string,"It can be APT, G-code, etc. It must contain the tool path coordinates, tool feed rate and step down."
+Tool Path,toolpath code,str,"It can be APT, G-code, etc. It must contain the tool path coordinates, tool feed rate and step down."
 Forming Conditions,feed rate,float,Units: mm/min. Feed rate of the forming tool.
 Forming Conditions,step down,float,Units: mm. Step down of the forming tool following an helical tool path.
-NC Program,g-code,string,
-Specimen,is prepared,string,
-Test Results,is fractured,string,
+NC Program,g-code,str,
+Specimen,is prepared,str,
+Test Results,is fractured,str,
 Test Results,flange height,float,Units: mm. Flange height of the produced part measured from the external flat surface.
-Test Results,strain distribution,string,
+Test Results,strain distribution,str,
 Test Results,hole expansion ratio,float,"Units: non-dimensional. Initial to final diameter ratio, d0/df."
 Test Results,non-dimensional flange height,float,"Units: non-dimensional. Flange height to final diameter ratio, h/df."
 Test Results,non-dimensional average thickness,float,"Units: non-dimensional. Average thickness along the flange to initial thickness ratio, t/t0."
-Material Properties,fracture forming limit,string,Table with pairs of major and minor strain values
+Material Properties,fracture forming limit,str,Table with pairs of major and minor strain values
 Analysis Results,,,"It groups LFR, FLD and Technological Parameters"
 LFR,global lfr,float,Units: non-dimensional. Limit forming ratio from all experimental tests.
 LFR,lfr per tool,float,Units: non-dimensional. Limit forming ratio from experimental tests using the same forming tool.
-FLD,global fld,string,Name of image file. FLD includes FFL curve and strain distribution for all tests.
-FLD,fld per tool,string,
-FLD,fld for successful tests,string,
-FLD,fld for fractured tests,string,
-Technological Parameters,flange height diagram,string,
-Technological Parameters,average thickness diagram,string,
-Conclusions,limit forming ratio,string,
-Conclusions,flange height,string,
-Conclusions,average thickness,string,
-Conclusions,bending ratio,string,
+FLD,global fld,str,Name of image file. FLD includes FFL curve and strain distribution for all tests.
+FLD,fld per tool,str,
+FLD,fld for successful tests,str,
+FLD,fld for fractured tests,str,
+Technological Parameters,flange height diagram,str,
+Technological Parameters,average thickness diagram,str,
+Conclusions,limit forming ratio,str,
+Conclusions,flange height,str,
+Conclusions,average thickness,str,
+Conclusions,bending ratio,str,

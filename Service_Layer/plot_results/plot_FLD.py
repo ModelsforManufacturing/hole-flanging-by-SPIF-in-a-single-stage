@@ -16,27 +16,35 @@ image_format = 'png'
 image_dpi = 90
 
 
-def plot_fld(instance, strain_distribution, fracture_forming_limit):
-    ffl = 'Data_Layer/%s' % fracture_forming_limit
-    ffl = np.genfromtxt(ffl, dtype='float', names=True)
-    fig_fld = 'FLD.png'
-
-    ffl_e1 = ffl['e1']
-    ffl_e2 = ffl['e2']
-
-    if strain_distribution != '':
-        strain = 'Data_Layer/%s/%s' % (instance, strain_distribution)
-        print(strain)
-        strain = np.genfromtxt(strain, dtype='float', names=True)
-        e1 = strain['e1']
-        e2 = strain['e2']
-
-    
+def plot_fld(instance_name, ffl_file, strain_file, strain_files, diagram_file='FLD.png'):
     # Principal strains distribution in FLD
     fig, ax = plt.subplots()
-    ax.plot(ffl_e2, ffl_e1, 'k', label='FFL')
-    if strain_distribution != '':
-        ax.plot(e2, e1, 'r', label=instance)    
+
+    # plot FFL
+#    print(ffl_file)
+    ffl = np.genfromtxt(ffl_file, dtype='float', names=True)
+    ffl_e1 = ffl['e1']
+    ffl_e2 = ffl['e2']
+    ax.plot(ffl_e2, ffl_e1, 'k', linewidth=2, label='FFL')
+
+    # plot strain distribution
+#    print(strain_file)
+    strain = np.genfromtxt(strain_file, dtype='float', names=True)
+    e1 = strain['e1']
+    e2 = strain['e2']
+    ax.plot(e2, e1, 'r', label=instance_name)    
+    
+    # plot other strain distributions
+    for sf in strain_files:
+#        print(sf)
+        strain = np.genfromtxt(sf, dtype='float', names=True)
+        e1 = strain['e1']
+        e2 = strain['e2']
+        for s in ['Data_Layer/', '/strain.csv']:
+            sf = sf.replace(s, '')
+        ax.plot(e2, e1, '-', label=sf)    
+        
+    
     ax.plot([0,-1], [0,2], 'k--', linewidth=0.5)
     ax.plot([0, 1], [0,1], 'k--', linewidth=0.5)
     ax.plot([0, 0], [0,1], 'k--', linewidth=0.5)
@@ -47,18 +55,15 @@ def plot_fld(instance, strain_distribution, fracture_forming_limit):
     plt.axis([-0.3, 0.3, 0, 1])
     plt.legend()
     
-    plt.savefig('Data_Layer/%s/%s' % (instance, fig_fld), dpi=image_dpi, format=image_format)
+    plt.savefig(diagram_file, dpi=image_dpi, format=image_format)
     plt.show()
     plt.close(fig)
     
-    return fig_fld
     
-
-
 
 
 if __name__ == '__main__':
     import os
     os.chdir('../..')
-    plot_fld('R6-d635', 'strain.csv', 'files/fracture_forming_limit.csv')
+    plot_fld('R6-d635', 'files/fracture_forming_limit.csv', 'strain.csv')
     
