@@ -1,53 +1,19 @@
 # MfM case study: hole flanging by SPIF in a single stage
 
 
-## 3-Layer Model Overview
+## 3-Layer Model (3LM) Overview
 
-![](packages.png)
+![](3LM_model_for_hole-flanging_by_SPIF_v6.png)
+
+
+## Service Layer
+
+It comprises the software tools to simulate the application.
 
 
 ## Ontology Layer
 
 See [Ontology_Layer/README.md](Ontology_Layer/README.md)
-
-The following files are automatically generated from the model defined in the Ontology Layer:
-
-- `interfaces/data_interface.py`
-- `interfaces/behaviour_interface.py`
-- `interfaces/mediating_controller.py`
-- `Data_Layer/data.py`
-
-## Interfaces
-
-### `interfaces/data_interface.py`
-
-Python interfaces with instructions for implementing the Data Model.
-
-
-### `interfaces/behaviour_interface.py`
-
-Python interfaces with instructions for implementing the Behaviour Model.
-
-There is a interface for each `Task` of the `Elementary Activities`.
-The interface structure is generated from the definition of the `Task` as:
-
-    def <task>(
-            <input_1>: type, 
-            ...
-            <input_n>: type
-            ) -> output type:
-        '''
-        Comments section with instructions for implementing the interface:
-        <rule>
-        <input>
-        <output>
-        <constraint>
-        '''
-        pass
-
-### `interfaces/mediating_controller.py`
-
-The Behaviour Layer is completely decoupled from the Data Layer such that both can interact only via the mediating controller.
 
 
 ## Data Layer
@@ -90,57 +56,99 @@ Example of a configuration file:
     is prepared = y
     
     [Test Results]
-    non-dimensional flange height = 0.1931106471816284
     is fractured = n
-    hole expansion ratio = 1.4852713178294574
-    non-dimensional average thickness = 0.8459459459459459
+    flange height = 23.6
     strain distribution = strain.csv
-    flange height = 18.5
+    hole expansion ratio = 1.4852713178294574
+    non-dimensional flange height = 0.24634655532359084
+    non-dimensional average thickness = 0.6631355932203389
     
-    [LFR]
+    [Flangeability Parameters]
+    overall lfr = 1.4852713178294574
     lfr per tool = 1.4852713178294574
-    global lfr = 1.4852713178294574
-    
+        
     [FLD]
+    overall fld = FLD_successful_tests.png
     fld per tool = FLD_R6.png
-    fld for fractured tests = FLD_failed_tests.png
     fld for successful tests = FLD_successful_tests.png
-    global fld = FLD_successful_tests.png
-    
-    [Technological Parameters]
+    fld for fractured tests = FLD_failed_tests.png
+        
+    [Flangeability Diagrams]
     flange height diagram = diagram_HER-h.png
     average thickness diagram = diagram_HER-t.png
-    
-    [Conclusions]
-    bending ratio = test
-    flange height = test
-    limit forming ratio = test
-    average thickness = test
+
+## Interfaces and Middleware
+
+The following files are automatically generated from the ontology model:
+
+- `Service_Layer/if_data.py`
+- `Service_Layer/if_behaviour.py`
+- `Service_Layer/mw_data.py`
+- `Service_Layer/mw_adapter.py`
+
+### `Service_Layer/if_data.py`
+
+File generated automatically.
+
+Python interfaces with instructions for implementing the Data Model.
 
 
-### `Data_Layer/data.py`
 
-Implementation of `interfaces/data_interface.py` to retrieve/save the instance data from/to `Data_Layer/<instance_name>/data.ini`.
+### `Service_Layer/if_behaviour.py`
+
+File generated automatically.
+
+Python interfaces with instructions for implementing the Behaviour Model.
+
+There is a interface for each `Task` of the `Elementary Activities`.
+The interface structure is generated from the definition of the `Task` as:
+
+    def <task>(
+            <input_1>: type, 
+            ...
+            <input_n>: type
+            ) -> output type:
+        '''
+        Comments section with instructions for implementing the interface:
+        <rule>
+        <input>
+        <output>
+        <constraint>
+        '''
+        pass
+
+### `Service_Layer/mw_data.py`
+
+File generated automatically.
+
+Implementation of `Service_Layer/if_data.py` to retrieve/save the instance data from/to `Data_Layer/<instance_name>/data.ini`.
 
 `data.ini` is backed up as `data_<timestamp>.ini` before running a simulation.
 
 
-## Service Layer
+### `Service_Layer/mw_adapter.py`
 
-### `Service_Layer/behaviour.py`
+File generated automatically.
 
-Implementation of `interfaces/behaviour_interface.py` that can call scripts or batch files to execute the tasks using external software. Examples:
+The Behaviour Layer is completely decoupled from the Data Layer such that both can interact only via the mediating controller.
+
+
+### `Service_Layer/mw_behaviour.py`
+
+Implementation of `Service_Layer/if_behaviour.py` that can call scripts or batch files to execute the tasks using external software. Examples:
 
 1. A Python script to calculate the flange height
 2. A CATIA VBA script to update the flange height of the design part. 
 3. A Python script to update the ABAQUS model and run the simulation.
 
 
-### `Service_Layer/visualization.py`
+## Simulation Application
+
+### `Service_Layer/viewer.py`
 
 `Visualization` class with methods to display information of data instances.
 
-### `Service_Layer/simulation.py`
+### `Service_Layer/simulator.py`
 
 `Simulation` class with methods to perform a MfM simulation from the command line.
 

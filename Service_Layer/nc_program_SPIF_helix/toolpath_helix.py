@@ -9,7 +9,6 @@ from math import pi, sin, cos
 import csv          # CSV File Reading and Writing
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 
 def toolpath_helix(instance_name, R, h, df=95.8, f=1000, sd=0.2):
     '''
@@ -92,18 +91,17 @@ def toolpath_helix(instance_name, R, h, df=95.8, f=1000, sd=0.2):
 def plot_toolpath(toolpath_file):
     image_format = 'png'
     image_dpi = 90
-    plt.rcParams["figure.figsize"] = (7.48, 6)
-    plt.rcParams["font.family"] = 'sans-serif'
-    plt.rcParams["font.sans-serif"] = 'Arial, Helvetica, sans-serif'
-    plt.rcParams["font.size"] = 8
-    plt.rcParams["lines.linewidth"] = 1
-    plt.rcParams["lines.markersize"] = 3
+#    plt.rcParams["figure.figsize"] = (7.48, 6)
+#    plt.rcParams["font.family"] = 'sans-serif'
+#    plt.rcParams["font.sans-serif"] = 'Arial, Helvetica, sans-serif'
+#    plt.rcParams["font.size"] = 8
+#    plt.rcParams["lines.linewidth"] = 1
+#    plt.rcParams["lines.markersize"] = 3
 
     print('Plotting 3D trajectory of the tool tip:')
 
     fig = plt.figure()
-    #ax = fig.gca(projection='3d') --> Valid for matplotlib version prior to 1.0.0
-    ax = Axes3D(fig)
+    ax = fig.add_subplot(projection='3d')
 
     #==============================================================================
     # theta = np.linspace(-4 * np.pi, 4 * np.pi, 100)

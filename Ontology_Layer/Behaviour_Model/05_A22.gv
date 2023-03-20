@@ -12,17 +12,17 @@ test [label="{Test Results|is fractured\l}"];
 
 # mechanisms
 node [shape=box, style=filled, fillcolor=white, color=green]
-m1 [label="User Interface"]
+m1 [label="User Query"]
 
 # tasks definition
 node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]
 Start
-t1 [label="Perform Hole Flanging Test"]
+t1 [label="Check for Fracture"]
 End
 
 # rules
 node [shape=box, style="filled, rounded", fillcolor=white, color=blue]
-r1 [label="Verify that the specimen is\nprepared, show information\nabout the NC program to be\nexecuted and, wait for the\nexperimental test, and\nask if fracture occurred."]
+r1 [label="Verify that the specimen is\nprepared, show information\nabout the NC program to be\nexecuted, wait for the\nexperimental test, and\nask if fracture occurred."]
 
 # attaching rules
 edge [dir=none, color=blue, style=dashed]

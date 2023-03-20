@@ -4,28 +4,24 @@ Blank Model,hole diameter,float,Units: mm. Diameter of the hole to be cut to the
 Part Model,diameter,float,Units: mm. Inner diameter of the hole-flanged part to be manufactured.
 Part Model,flange height,float,Units: mm. Theoretical flange height measured from the external flat surface.
 Forming Tool Model,radius,float,Units: mm. Forming tool radius.
-Tool Path,toolpath code,str,"It can be APT, G-code, etc. It must contain the tool path coordinates, tool feed rate and step down."
+Tool Path,toolpath code,str,"Name of CSV file containing the tool path coordinates, tool feed rate and step down."
 Forming Conditions,feed rate,float,Units: mm/min. Feed rate of the forming tool.
 Forming Conditions,step down,float,Units: mm. Step down of the forming tool following an helical tool path.
-NC Program,g-code,str,
-Specimen,is prepared,str,
-Test Results,is fractured,str,
-Test Results,flange height,float,Units: mm. Flange height of the produced part measured from the external flat surface.
-Test Results,strain distribution,str,
+NC Program,g-code,str,Name of text file containing the G-code for the CNC machine tool.
+Specimen,is prepared,str,"Options: “y”, “yes”, “n”, “no”. Indicates if the specimen is already prepared to start the experimental test."
+Test Results,is fractured,str,"Options: “y”, “yes”, “n”, “no”. Indicates whether the specimen failed (test failed) or not (test successful)."
+Test Results,flange height,float,Units: mm. Flange height of the produced part measured from the external flat surface. Valid only for successful tests.
+Test Results,strain distribution,str,"Name of CSV file containing the strain distribution measured on the tested specimen. Row format: minor strain, major strain."
 Test Results,hole expansion ratio,float,"Units: non-dimensional. Initial to final diameter ratio, d0/df."
 Test Results,non-dimensional flange height,float,"Units: non-dimensional. Flange height to final diameter ratio, h/df."
 Test Results,non-dimensional average thickness,float,"Units: non-dimensional. Average thickness along the flange to initial thickness ratio, t/t0."
-Material Properties,fracture forming limit,str,Table with pairs of major and minor strain values
-Analysis Results,,,"It groups LFR, FLD and Technological Parameters"
-LFR,global lfr,float,Units: non-dimensional. Limit forming ratio from all experimental tests.
-LFR,lfr per tool,float,Units: non-dimensional. Limit forming ratio from experimental tests using the same forming tool.
-FLD,global fld,str,Name of image file. FLD includes FFL curve and strain distribution for all tests.
-FLD,fld per tool,str,
-FLD,fld for successful tests,str,
-FLD,fld for fractured tests,str,
-Technological Parameters,flange height diagram,str,
-Technological Parameters,average thickness diagram,str,
-Conclusions,limit forming ratio,str,
-Conclusions,flange height,str,
-Conclusions,average thickness,str,
-Conclusions,bending ratio,str,
+Material Properties,fracture forming limit,str,"Name of CSV file containing the FFL definition. Row format: minor strain, major strain."
+Analysis Results,,,"Used to group Flangeability Parameters, FLD and Flangeability Diagrams into a single object."
+Flangeability Parameters,overall lfr,float,Units: non-dimensional. Limit forming ratio (LFR) from all experimental tests.
+Flangeability Parameters,lfr per tool,float,Units: non-dimensional. Limit forming ratio (LFR) from experimental tests using a given forming tool.
+FLD,overall fld,str,Name of image file containing an FLD with the FFL curve and strain distribution for all tests.
+FLD,fld per tool,str,Name of image file containing an FLD with the FFL curve and strain distribution for tests using a given forming tool.
+FLD,fld for successful tests,str,Name of image file containing an FLD with the FFL curve and strain distribution for successful tests.
+FLD,fld for fractured tests,str,Name of image file containing an FLD with the FFL curve and strain distribution for failed tests.
+Flangeability Diagrams,flange height diagram,str,Name of image file containing the diagram: non-dimensional flange height vs. HER.
+Flangeability Diagrams,average thickness diagram,str,Name of image file containing the diagram: non-dimensional average thicknesst vs. HER.

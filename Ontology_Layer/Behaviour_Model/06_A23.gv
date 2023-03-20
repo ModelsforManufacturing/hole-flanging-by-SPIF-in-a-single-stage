@@ -12,7 +12,7 @@ s [label="{Test Results|strain distribution\l}"];
 
 # mechanisms
 node [shape=box, style=filled, fillcolor=white, color=green]
-m1 [label="User Interface"]
+m1 [label="User Query"]
 
 # tasks definition
 node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]

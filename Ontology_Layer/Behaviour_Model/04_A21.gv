@@ -13,17 +13,17 @@ prog [label="{NC Program|g-code\l}", fillcolor=yellow];
 
 # mechanisms
 node [shape=box, style=filled, fillcolor=white, color=green]
-m1 [label="User Interface"]
+m1 [label="User Query"]
 
 # tasks definition
 node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]
 Start
-t1 [label="Prepare Specimen"]
+t1 [label="Check for Specimen"]
 End
 
 # rules
 node [shape=box, style="filled, rounded", fillcolor=white, color=blue]
-r1 [label="Show information about\nthe specimen to be\nprepared and ask\nfor confirmation."]
+r1 [label="Show information about\nthe specimen to be\nprepared (after 'g-code'\nis generated) and ask\nfor confirmation."]
 
 # attaching rules
 edge [dir=none, color=blue, style=dashed]
@@ -44,7 +44,7 @@ t1 -> spec
 
 # constraints
 node [shape=ellipse, style=filled, fillcolor=white, color=red]
-c1 [label="after 'g-code'\nis generated"]
+c1 [label="'g-code' exists"]
 
 # attaching constraints
 edge [dir=none, color=red, style=dashed]

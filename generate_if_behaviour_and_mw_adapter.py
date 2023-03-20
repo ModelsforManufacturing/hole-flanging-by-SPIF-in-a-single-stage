@@ -61,10 +61,10 @@ Author: Domingo Morales Palma <dmpalma@us.es>
 This file has been generated automatically.
 '''
 
-from Service_Layer.behaviour import Behaviour
-from Data_Layer.data import *
+from Service_Layer.mw_data import *
+from Service_Layer.mw_behaviour import MwBehaviour
 
-class MediatingController:
+class Adapter:
     def __init__(self, instance_name):
         self.instance_name = instance_name
 
@@ -327,7 +327,7 @@ def generate_method(task, objects):
                 args_counter += 1
                 c = objects[i]['object_name']
                 outputs = '%s\n%si.%s.%s = %s_%d' % (outputs, ' '*indent*2, c, a, a, args_counter)
-                outputs = '%s\n%si.save()' % (outputs, ' '*indent*2)
+            outputs = '%s\n%si.save()' % (outputs, ' '*indent*2)
         else:                                                       # internal objects
             args_counter += 1
             outputs = '%s\n%s# TO BE DEFINED: %s_%d' % (outputs, ' '*indent*2, i, args_counter)
@@ -361,7 +361,7 @@ def generate_method(task, objects):
             action_args = '%s, %s_%d' % (action_args, i, args_counter)
 #    if len(action_args) > 0:
 #        action_args = action_args[2:]  # remove the first ', ' from the argument list string
-    action = '\n%s%s = Behaviour.%s(%s)' % (' '*indent*2, args, function_name, action_args)
+    action = '\n%s%s = MwBehaviour.%s(%s)' % (' '*indent*2, args, function_name, action_args)
 
     return template_mediating_controller_method.substitute(
         parser_method_declare = declare, 
@@ -494,10 +494,10 @@ def backup_and_regenerate_mediating_controller(graphviz_dir, python_file):
 if __name__ == '__main__':
     backup_and_regenerate_behaviour_interface(
         'Ontology_Layer/Behaviour_Model', 
-        'interfaces/behaviour_interface.py')
+        'Service_Layer/if_behaviour.py')
 
     backup_and_regenerate_mediating_controller(
         'Ontology_Layer/Behaviour_Model', 
-        'interfaces/mediating_controller.py')
+        'Service_Layer/mw_adapter.py')
 
 

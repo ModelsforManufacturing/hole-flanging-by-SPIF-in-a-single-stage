@@ -6,12 +6,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-plt.rcParams["figure.figsize"] = (5.51, 4)
-plt.rcParams["font.family"] = 'sans-serif'
-plt.rcParams["font.sans-serif"] = 'Arial, Helvetica, sans-serif, DejaVu Sans'
-plt.rcParams["font.size"] = 8
-plt.rcParams["lines.linewidth"] = 1
-plt.rcParams["lines.markersize"] = 3
+#plt.rcParams["figure.figsize"] = (5.51, 4)
+#plt.rcParams["font.family"] = 'sans-serif'
+#plt.rcParams["font.sans-serif"] = 'Arial, Helvetica, sans-serif, DejaVu Sans'
+#plt.rcParams["font.size"] = 8
+#plt.rcParams["lines.linewidth"] = 1
+#plt.rcParams["lines.markersize"] = 3
 image_format = 'png'
 image_dpi = 90
 

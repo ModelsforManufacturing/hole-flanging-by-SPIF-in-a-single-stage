@@ -11,7 +11,7 @@ prog [label="{NC Program|g-code\l}"];
 
 # mechanisms
 node [shape=box, style=filled, fillcolor=white, color=green]
-m1 [label="NC Post-processor"]
+m1 [label="NC Post-Processor"]
 
 # tasks definition
 node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]

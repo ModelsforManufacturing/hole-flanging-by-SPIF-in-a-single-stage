@@ -4,30 +4,31 @@ node [color=black, fillcolor=white, shape=record, style="filled, rounded"];
 
 blank [label="Blank Model"];
 part [label="Part Model"];
-tool [label="Forming Tool Model"];
+#tool [label="Forming Tool Model"];
 path [label="Tool Path"];
 cond [label="Forming Conditions"];
 prog [label="NC Program"];
 spec [label=Specimen];
-test [label="Test Results"];
 prop [label="Material Properties"];
-analy [label="Analysis Results"];
-lfr [label=LFR];
+tres [label="Test Results"];
+fres [label="Flangeability Results"];
+fpar [label="Flangeability Parameters"];
 fld [label=FLD];
-tech [label="Technological Parameters"];
-concl [label=Conclusions];
+fdia [label="Flangeability Diagrams"];
 
-analy -> {lfr, fld, tech} [label="has"];
+fres -> {fpar, fld, fdia} [label="has"];
 
-{blank, part, tool} -> path [label="addresses"]
+{blank, part} -> path [label="addresses"]
 {path, cond} -> prog [label="generates"]
 blank -> spec [label="defines"]
-{prog, spec} -> test [label="aims"]
-{prog, spec} -> analy [label="aims"]
-{test, prop} -> analy [label="addresses"]
-{test, analy} -> concl [label="leads to"]
+{prog, spec} -> tres [label="aims"]
+{prog, spec} -> fres [label="aims"]
+{tres, prop} -> fres [label="addresses"]
 
-node [fillcolor=yellow1]
+# enriched model
+node [fillcolor=yellow]
+
+tool -> path [label="addresses"]
 
 blank [label="{Blank Model|thickness\lhole diameter\l}"];
 part [label="{Part Model|diameter\lflange height\l}"];
@@ -36,11 +37,10 @@ path [label="{Tool Path|toolpath code\l}"];
 cond [label="{Forming Conditions|feed rate\lstep down\l}"];
 prog [label="{NC Program|g-code\l}"];
 spec [label="{Specimen|is prepared\l}"];
-test [label="{Test Results|is fractured\lflange height\lstrain distribution\lhole expansion ratio\lnon-dimensional flange height\lnon-dimensional average thickness\l}"];
 prop [label="{Material Properties|fracture forming limit\l}"];
-lfr [label="{LFR|global lfr\llfr per tool\l}"];
-fld [label="{FLD|global fld\lfld per tool\lfld for successful tests\lfld for fractured tests\l}"];
-tech [label="{Technological Parameters|flange height diagram\laverage thickness diagram\l}"];
-concl [label="{Conclusions|limit forming ratio\lflange height\laverage thickness\lbending ratio\l}"];
+tres [label="{Test Results|is fractured\lflange height\lstrain distribution\lhole expansion ratio\lnon-dimensional flange height\lnon-dimensional average thickness\l}"];
+fpar [label="{Flangeability Parameters|overall lfr\llfr per tool\l}"];
+fld [label="{FLD|overall fld\lfld per tool\lfld for successful tests\lfld for fractured tests\l}"];
+fdia [label="{Flangeability Diagrams|flange height diagram\laverage thickness diagram\l}"];
 
 }

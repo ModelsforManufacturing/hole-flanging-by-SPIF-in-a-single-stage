@@ -2,7 +2,7 @@ digraph behaviourmodel {
 
 # activity title
 labelloc="t"
-label="A31 Process Test Data"
+label="A31 Calculate Test Parameters"
 
 # inputs and outputs
 node [shape=record, style=filled, fillcolor=white, color=black]
@@ -17,7 +17,7 @@ t_t0 [label="{Test Results|non-dimensional average thickness\l}"];
 
 # mechanisms
 node [shape=box, style=filled, fillcolor=white, color=green]
-m1 [label="Data Processing System"]
+m1 [label="Data Processor"]
 
 # tasks definition
 node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]

@@ -2,18 +2,18 @@ digraph behaviourmodel {
 
 # activity title
 labelloc="t"
-label="A321 Calculate LFR"
+label="A321 Calculate Flangeability Parameters"
 
 # inputs and outputs
 node [shape=record, style=filled, fillcolor=white, color=black]
 test [label="{Test Results|hole expansion ratio\lis fractured\l}"];
 tool [label="{Forming Tool Model|radius\l}", fillcolor=yellow];
-lfr [label="{LFR|global lfr\l}"];
-lfr_tool [label="{LFR|lfr per tool\l}"];
+lfr [label="{Flangeability\nParameters|overall lfr\l}"];
+lfr_tool [label="{Flangeability\nParameters|lfr per tool\l}"];
 
 # mechanisms
 node [shape=box, style=filled, fillcolor=white, color=green]
-m1 [label="Data Processing System"]
+m1 [label="Data Processior"]
 
 # tasks definition
 node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]

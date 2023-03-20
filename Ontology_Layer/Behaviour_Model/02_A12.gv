@@ -6,9 +6,9 @@ label="A12 Calculate Tool Path"
 
 # inputs and outputs
 node [shape=record, style=filled, fillcolor=white, color=black]
-blank [label="{Blank Model|thickness\l}"];
+blank [label="{Blank Model|thickness\l}", fillcolor=yellow];
 part [label="{Part Model|diameter\lflange height\l}"];
-tool [label="{Forming Tool Model|radius\l}"];
+tool [label="{Forming Tool Model|radius\l}", fillcolor=yellow];
 cond [label="{Forming Conditions|feed rate\lstep down\l}"];
 path [label="{Tool Path|toolpath code\l}"];
 

@@ -50,12 +50,12 @@ def plot_her_t(data_SPIF, diagram_file):
     image_format = 'png'
     image_dpi = 100
 
-    plt.rcParams["figure.figsize"] = (5.51, 4)
-    plt.rcParams["font.family"] = 'sans-serif'
-    plt.rcParams["font.sans-serif"] = 'Arial, Helvetica, sans-serif'
-    plt.rcParams["font.size"] = 8
-    plt.rcParams["lines.linewidth"] = 1
-    plt.rcParams["lines.markersize"] = 3
+#    plt.rcParams["figure.figsize"] = (5.51, 4)
+#    plt.rcParams["font.family"] = 'sans-serif'
+#    plt.rcParams["font.sans-serif"] = 'Arial, Helvetica, sans-serif'
+#    plt.rcParams["font.size"] = 8
+#    plt.rcParams["lines.linewidth"] = 1
+#    plt.rcParams["lines.markersize"] = 3
 
     fig, ax = plt.subplots()
 

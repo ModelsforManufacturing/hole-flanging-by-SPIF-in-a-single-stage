@@ -22,7 +22,9 @@ def get_semantic_data(semantic_data, data_object, parameter):
     for row in semantic_data:
         if (row['Object name'] == data_object) and (row['Parameter name'] == parameter):
             return (row['Type'], row['Description'])
-    print("Warning: Parameter's type not found!")
+    print("[Warning] Parameter's type not found!")
+    print("  Object, Parameter = '%s', '%s'" %(data_object, parameter))
+    print("  It seems that Semantic model and Data/Behaviour model are not connected correctly!")
 
    
 

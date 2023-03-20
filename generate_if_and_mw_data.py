@@ -360,8 +360,8 @@ if __name__ == '__main__':
     semantic = 'Ontology_Layer/Semantic_Model/Semantic_Model.csv'
     
     backup_and_regenerate_data_interface_file(data_enriched, semantic, 
-        'interfaces/data_interface.py')
+        'Service_Layer/if_data.py')
 
     backup_and_regenerate_data_file(data_enriched, semantic, 
-        'Data_Layer/data.py')
+        'Service_Layer/mw_data.py')
 

@@ -10,14 +10,14 @@ str [label="{Test Results|strain distribution\l}"];
 frac [label="{Test Results|is fractured\l}"];
 prop [label="{Material Properties|fracture forming limit\l}"];
 tool [label="{Forming Tool Model|radius\l}", fillcolor=yellow];
-fld [label="{FLD|global fld\l}"];
+fld [label="{FLD|overall fld\l}"];
 fld_tool [label="{FLD|fld per tool\l}"];
 fld_succ [label="{FLD|fld for successful tests\l}"];
 fld_fail [label="{FLD|fld for fractured tests\l}"];
 
 # mechanisms
 node [shape=box, style=filled, fillcolor=white, color=green]
-m1 [label="Data Processing System"]
+m1 [label="Data Processor"]
 
 # tasks definition
 node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]

@@ -1,11 +1,7 @@
-# this is optional:
-#from interfaces.service_interface import ServiceInterface
-#class Behaviour(ServiceInterface):
-
 import os
-from Data_Layer.data import DataInstance
+from Service_Layer.mw_data import DataInstance
 
-class Behaviour:
+class MwBehaviour:
     def __init__(self, instance_name):
         self.instance_name = instance_name
 
@@ -22,20 +18,45 @@ class Behaviour:
         return instances
 
     @staticmethod
-    def calculate_flange_height(instance_name, t0, d0, df, R):
+    def fix_properties(instance_name):
+        '''
+        Fix values for properties that are common to all experimental tests.
+        '''
+        print('Setting values for properties that are common to all experimental tests:')
+        t0 = 1.6
+        df = 95.8
+        f  = 1000
+        sd = 0.2
+        ffl = 'files/fracture_forming_limit.csv'
+        print('   Output: t0 = %.1f mm, df = %.1f mm, f = %s mm/min, sd = %.1f mm, ffl="%s"' % (t0, df, f, sd, ffl))
+        return t0, df, f, sd, ffl
+
+    @staticmethod
+    def ask_for_properties(instance_name):
+        '''
+        Ask the user for the values of the initial properties of an experimental test.
+        '''
+        print('Asking the user for the values of the initial properties of an experimental test:')
+        d0 = float(input('Enter pre-cut hole diameter of the specimen (mm): '))
+        R  = float(input('Enter tool radius (mm) [6, 8, 10]: '))
+        print('   Output: d0 = %.2f mm, R = %.2f mm' % (d0, R))
+        return d0, R
+
+    @staticmethod
+    def calculate_flange_height(instance_name, t0, d0, R, df):
         '''
         Simple estimation for the final flange height.
         '''
-        h = (df - d0)/2
         print('Calculating flange height:')
-        print('   t0 = %f mm, d0 = %f mm, R = %f mm, df = %f mm' % (t0, d0, R, df))
-        print('   Output: flange height = %f mm' % h)
+#        print('   t0 = %f mm, d0 = %f mm, R = %f mm, df = %f mm' % (t0, d0, R, df))
+        h = (df - d0)/2
+        print('   Output: flange height = %.2f mm' % h)
         return h
 
     @staticmethod
     def calculate_tool_path(instance_name, t0, df, h, R, f, sd):
         print('Generating toolpath code:')
-        print('   t0 = %f mm, df = %f mm, h = %f mm, R = %f mm, f = %f mm/min, sd = %f mm' % (t0, df, h, R, f, sd))
+#        print('   t0 = %f mm, df = %f mm, h = %f mm, R = %f mm, f = %f mm/min, sd = %f mm' % (t0, df, h, R, f, sd))
         
         import Service_Layer.nc_program_SPIF_helix.toolpath_helix as tp
         filename = tp.toolpath_helix(instance_name, R, h, df, f, sd)
@@ -47,7 +68,7 @@ class Behaviour:
     def generate_g_code(instance_name, toolpath):
         g_code = "nc-program.gcode"
         print('Generating G-code:')
-        print('   tool path in file "%s"' % toolpath)
+#        print('   tool path in file "%s"' % toolpath)
 
         import Service_Layer.nc_program_SPIF_helix.toolpath2gcode as tp
         g_code = tp.toolpath2gcode(instance_name, toolpath)
@@ -56,7 +77,7 @@ class Behaviour:
         return g_code
 
     @staticmethod
-    def prepare_specimen(instance_name, t0, d0, g_code):
+    def check_for_specimen(instance_name, t0, d0, g_code):
         if g_code == '':
             print('Warning: the G-code is required before executing this action.')
             is_prepared = ''
@@ -74,7 +95,7 @@ class Behaviour:
         return is_prepared
 
     @staticmethod
-    def perform_hole_flanging_test(instance_name, gcode, is_prepared):
+    def check_for_fracture(instance_name, is_prepared, gcode):
         if not is_prepared in ['yes', 'y']:
             print('Warning: the specimen has not been prepared yet.')
             is_fractured = ''
@@ -118,7 +139,7 @@ class Behaviour:
         return strain
 
     @staticmethod
-    def calculate_hole_expansion_ratio(instance_name, is_fractured, df, d0):
+    def calculate_hole_expansion_ratio(instance_name, d0, df, is_fractured):
         if not is_fractured in ['no', 'n']:
             print('Warning: this task can only be executed for non fractured specimens.')
             her = 0
@@ -129,7 +150,7 @@ class Behaviour:
         return her
 
     @staticmethod
-    def calculate_non_dimensional_flange_height(instance_name, is_fractured, h, df):
+    def calculate_non_dimensional_flange_height(instance_name, df, is_fractured, h):
         if not is_fractured in ['no', 'n']:
             print('Ups! h/df can be only calculated if the specimen was no fractured')
             h_df = 0
@@ -140,7 +161,7 @@ class Behaviour:
         return h_df
 
     @staticmethod
-    def calculate_non_dimensional_average_thickness(instance_name, is_fractured, h, d0, df, t0):
+    def calculate_non_dimensional_average_thickness(instance_name, d0, t0, df, is_fractured, h):
         if not is_fractured in ['no', 'n']:
             print('Ups! t/t0 can be only calculated if the specimen was no fractured')
             t_t0 = 0
@@ -154,7 +175,7 @@ class Behaviour:
     @staticmethod
     def calculate_global_lfr(instance_name, her, is_fracture):
         # search in all succesful tests and calculate LFR=max(HER)
-        instances = Behaviour.__find_instances()
+        instances = MwBehaviour.__find_instances()
         her_list = []
         for instance_name in instances:
             i = DataInstance(instance_name)
@@ -165,9 +186,9 @@ class Behaviour:
         return global_lfr
 
     @staticmethod
-    def calculate_lfr_per_tool(instance_name, R, her, is_fracture):
+    def calculate_lfr_per_tool(instance_name, her, is_fracture, R):
         # search in all succesful tests using tool radius R and calculate LFR=max(HER)
-        instances = Behaviour.__find_instances()
+        instances = MwBehaviour.__find_instances()
         her_list = []
         for instance_name in instances:
             i = DataInstance(instance_name)
@@ -183,7 +204,7 @@ class Behaviour:
     def plot_global_fld(instance_name, strain_distribution, fracture_forming_limit):
         ffl_file    = 'Data_Layer/%s' % fracture_forming_limit
         strain_file = 'Data_Layer/%s/%s' % (instance_name, strain_distribution)
-        instances   = Behaviour.__find_instances()
+        instances   = MwBehaviour.__find_instances()
         strain_files = []
         for i in instances:
             fn = 'Data_Layer/%s/strain.csv' % i
@@ -203,7 +224,7 @@ class Behaviour:
     def plot_fld_per_tool(instance_name, strain_distribution, fracture_forming_limit, R):
         ffl_file    = 'Data_Layer/%s' % fracture_forming_limit
         strain_file = 'Data_Layer/%s/%s' % (instance_name, strain_distribution)
-        instances   = Behaviour.__find_instances()
+        instances   = MwBehaviour.__find_instances()
         strain_files = []
         for i in instances:
             di = DataInstance(i)
@@ -225,7 +246,7 @@ class Behaviour:
     def plot_fld_for_successful_tests(instance_name, strain_distribution, fracture_forming_limit, is_fractured):
         ffl_file    = 'Data_Layer/%s' % fracture_forming_limit
         strain_file = 'Data_Layer/%s/%s' % (instance_name, strain_distribution)
-        instances   = Behaviour.__find_instances()
+        instances   = MwBehaviour.__find_instances()
         strain_files = []
         for i in instances:
             di = DataInstance(i)
@@ -248,7 +269,7 @@ class Behaviour:
         ffl_file    = 'Data_Layer/%s' % fracture_forming_limit
         strain_file = 'Data_Layer/%s/%s' % (instance_name, strain_distribution)
         strain_files = []
-        instances = Behaviour.__find_instances()
+        instances = MwBehaviour.__find_instances()
         for i in instances:
             di = DataInstance(i)
             di.load()
@@ -268,7 +289,7 @@ class Behaviour:
     @staticmethod
     def plot_h_df(instance_name, h_df):
         data_SPIF = []
-        instances = Behaviour.__find_instances()
+        instances = MwBehaviour.__find_instances()
         for i in instances:
             di = DataInstance(i)
             di.load()
@@ -289,7 +310,7 @@ class Behaviour:
     @staticmethod
     def plot_t_t0(instance_name, t_t0):
         data_SPIF = []
-        instances = Behaviour.__find_instances()
+        instances = MwBehaviour.__find_instances()
         for i in instances:
             di = DataInstance(i)
             di.load()
@@ -307,55 +328,3 @@ class Behaviour:
 
         return average_thickness_diagram
 
-    @staticmethod
-    def conclusions_for_lfr(instance_name, global_lfr, lfr_per_tool):
-        conclusions_limit_forming_ratio = input('Write the main conclusions regarding the LFR = %.2f: ' % global_lfr)
-        return conclusions_limit_forming_ratio
-        
-    @staticmethod
-    def conclusions_for_height(instance_name, flange_height_diagram):
-        print('Showing the HER vs. h/df diagram...')
-
-        from matplotlib import pyplot as plt
-        from matplotlib import image as mpimg
-        image = mpimg.imread('Data_Layer/%s/%s' % (instance_name, flange_height_diagram))
-        plt.imshow(image)
-        plt.show()
-        conclusions_flange_height = input('Write the main conclusions regarding the HER vs. h/df diagram: ')
-
-        return conclusions_flange_height
-        
-    @staticmethod
-    def conclusions_for_thickness(instance_name, average_thickness_diagram):
-        print('Showing the HER vs. t/t0 diagram...')
-
-        from matplotlib import pyplot as plt
-        from matplotlib import image as mpimg
-        image = mpimg.imread('Data_Layer/%s/%s' % (instance_name, average_thickness_diagram))
-        plt.imshow(image)
-        plt.show()
-        conclusions_average_thickness = input('Write the main conclusions regarding the HER vs. t/t0 diagram: ')
-
-        return conclusions_average_thickness
-        
-    @staticmethod
-    def conclusions_for_t0_r(instance_name, average_thickness_diagram, flange_height_diagram, global_fld, fld_per_tool, fld_for_successful_tests, fld_for_fractured_tests, global_lfr, lfr_per_tool):
-        from matplotlib import pyplot as plt
-        from matplotlib import image as mpimg
-
-        print('Showing the FLD...')
-        image = mpimg.imread('Data_Layer/%s/%s' % (instance_name, global_fld))
-        plt.imshow(image)
-        plt.show()
-
-        print('Showing the FLD for successful tests...')
-        image = mpimg.imread('Data_Layer/%s/%s' % (instance_name, fld_for_successful_tests))
-        plt.imshow(image)
-        plt.show()
-
-        conclusions_bending_ratio = input('Write the main conclusions regarding the bending ratio t0/R: ')
-
-        return conclusions_bending_ratio
-        
-
-    

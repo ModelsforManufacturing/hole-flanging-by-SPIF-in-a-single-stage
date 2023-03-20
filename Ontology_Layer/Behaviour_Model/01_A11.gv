@@ -8,12 +8,12 @@ label="A11 Predict Part Height"
 node [shape=record, style=filled, fillcolor=white, color=black]
 blank [label="{Blank Model|thickness\lhole diameter\l}"];
 part0 [label="{Part Model|diameter\l}"];
-tool [label="{Forming Tool Model|radius\l}"];
+tool [label="{Forming Tool Model|radius\l}", fillcolor=yellow];
 part [label="{Part Model|flange height\l}"];
 
 # mechanisms
 node [shape=box, style=filled, fillcolor=white, color=green]
-m1 [label="Math Equation Solver"]
+m1 [label="Equation Solver"]
 
 # tasks definition
 node [shape=box, style="filled, rounded", fillcolor=lightblue, color=black]

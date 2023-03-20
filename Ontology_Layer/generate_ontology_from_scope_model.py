@@ -156,7 +156,7 @@ def idl2mfm(json_file):
                         behaviour_model.pop(d)
                     behaviour_model.update({activity_id: {}})
                 else:                           # the single box in first diagram is root
-                    scope_model = {'root': activity_id, 'title': activity_label}
+                    scope_model = {}
                     behaviour_model.update({activity_id: {}})
             
 #                print(json.dumps(activity, indent=4))
@@ -474,14 +474,15 @@ def test_idl2mfm(json_file1, json_file2, text_file):
 if __name__ == '__main__':
     idl_file = 'Scope_Model/Scope_Model.idl'
 
-    text_file1 = 'example - 1 parsing IDL format.txt'
-    json_file1 = 'example - 1 parsing IDL format.json'
-    text_file2 = 'example - 2 from IDL to MfM ontology.txt'
-    json_file2 = 'example - 2 from IDL to MfM ontology.json'
-    
-#    test_idl2json(idl_file, json_file1, text_file1)
-#    test_summary_json(json_file1)
-#    test_idl2mfm(json_file1, json_file2, text_file2)
+    '''
+    text_file1 = 'tmp/example - 1 parsing IDL format.txt'
+    json_file1 = 'tmp/example - 1 parsing IDL format.json'
+    text_file2 = 'tmp/example - 2 from IDL to MfM ontology.txt'
+    json_file2 = 'tmp/example - 2 from IDL to MfM ontology.json'
+    test_idl2json(idl_file, json_file1, text_file1)
+    test_summary_json(json_file1)
+    test_idl2mfm(json_file1, json_file2, text_file2)
+    '''
     
     json_file = 'ontology.json'    
     generate_ontology(idl_file, json_file)
