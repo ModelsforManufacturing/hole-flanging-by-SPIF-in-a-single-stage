@@ -16,7 +16,9 @@ It comprises the software tools to simulate the application.
 See [Ontology_Layer/README.md](Ontology_Layer/README.md)
 
 
-## Data Layer
+
+<details>
+<summary><h2>Data Layer</h2></summary>
 
 ### `Data_Layer/files`
 
@@ -77,7 +79,11 @@ Example of a configuration file:
     flange height diagram = diagram_HER-h.png
     average thickness diagram = diagram_HER-t.png
 
-## Interfaces and Middleware
+</details>
+
+<details>
+<summary><h2>Interfaces and Middleware</h2></summary>
+
 
 The following files are automatically generated from the ontology model:
 
@@ -142,7 +148,10 @@ Implementation of `Service_Layer/if_behaviour.py` that can call scripts or batch
 3. A Python script to update the ABAQUS model and run the simulation.
 
 
-## Simulation Application
+</details>
+
+<details>
+<summary><h2>Simulation Application</h2></summary>
 
 ### `Service_Layer/viewer.py`
 
@@ -152,6 +161,8 @@ Implementation of `Service_Layer/if_behaviour.py` that can call scripts or batch
 
 `Simulation` class with methods to perform a MfM simulation from the command line.
 
+
+</details>
 
 ## `main.py`
 
