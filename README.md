@@ -3,7 +3,7 @@
 
 ## 3-Layer Model (3LM) Overview
 
-![](3LM_model_for_hole-flanging_by_SPIF_v6.png)
+![](3LM_model_for_hole-flanging_by_SPIF_v7.png)
 
 
 ## Service Layer
