@@ -16,7 +16,7 @@ image_format = 'png'
 image_dpi = 90
 
 
-def plot_fld(instance_name, ffl_file, strain_file, strain_files, diagram_file='FLD.png'):
+def plot_fld(instance_name, ffl_file, strain_file, strain_files, diagram_file='FLD.png', savefig=True):
     # Principal strains distribution in FLD
     fig, ax = plt.subplots()
 
@@ -55,7 +55,8 @@ def plot_fld(instance_name, ffl_file, strain_file, strain_files, diagram_file='F
     plt.axis([-0.3, 0.3, 0, 1])
     plt.legend()
     
-    plt.savefig(diagram_file, dpi=image_dpi, format=image_format)
+    if savefig:
+        plt.savefig(diagram_file, dpi=image_dpi, format=image_format)
     plt.show()
     plt.close(fig)
     
@@ -65,5 +66,9 @@ def plot_fld(instance_name, ffl_file, strain_file, strain_files, diagram_file='F
 if __name__ == '__main__':
     import os
     os.chdir('../..')
-    plot_fld('R6-d635', 'files/fracture_forming_limit.csv', 'strain.csv')
+    instance_name = 'R6-d635'
+    ffl_file = 'Data_Layer/files/fracture_forming_limit.csv'
+    strain_file = 'Data_Layer/%s/strain.csv' % instance_name
+    strain_files = []
+    plot_fld(instance_name, ffl_file, strain_file, strain_files, savefig=False)
     

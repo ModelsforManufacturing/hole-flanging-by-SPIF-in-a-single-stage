@@ -49,7 +49,10 @@ class MwBehaviour:
         '''
         print('Calculating flange height:')
 #        print('   t0 = %f mm, d0 = %f mm, R = %f mm, df = %f mm' % (t0, d0, R, df))
-        h = (df - d0)/2
+        
+        import Service_Layer.Equation_Solver.calculate_flange_height as cfh
+        h = cfh.calculate_flange_height(t0, d0, R, df)
+
         print('   Output: flange height = %.2f mm' % h)
         return h
 
@@ -58,7 +61,7 @@ class MwBehaviour:
         print('Generating toolpath code:')
 #        print('   t0 = %f mm, df = %f mm, h = %f mm, R = %f mm, f = %f mm/min, sd = %f mm' % (t0, df, h, R, f, sd))
         
-        import Service_Layer.nc_program_SPIF_helix.toolpath_helix as tp
+        import Service_Layer.CAD_CAM_system.toolpath_helix as tp
         filename = tp.toolpath_helix(instance_name, R, h, df, f, sd)
         
         print('   Output: tool path in file "%s"' % filename)
@@ -70,7 +73,7 @@ class MwBehaviour:
         print('Generating G-code:')
 #        print('   tool path in file "%s"' % toolpath)
 
-        import Service_Layer.nc_program_SPIF_helix.toolpath2gcode as tp
+        import Service_Layer.NC_Post_Processor.toolpath2gcode as tp
         g_code = tp.toolpath2gcode(instance_name, toolpath)
 
         print('   Output: G-code in file "%s"' % g_code)
@@ -82,16 +85,10 @@ class MwBehaviour:
             print('Warning: the G-code is required before executing this action.')
             is_prepared = ''
         else:
-            print('To perform the experimental test, a specimen is required with a %f-mm sheet thickness and a %f-mm hole diameter.' % (t0, d0))
-            is_prepared = input('Has the specimen already been manufactured? ')
-            is_prepared = is_prepared.lower()
-            if is_prepared in ['yes', 'y']:
-                print('Ok, task completed.')
-            elif is_prepared in ['no', 'n']:
-                print('Ok. Please note that this task has not been completed yet.')
-            else:
-                print('Answer not valid.')
-                is_prepared = ''
+
+            import Service_Layer.User_Query.check_for_specimen as cfs
+            is_prepared = cfs.check_for_specimen(t0, d0)
+
         return is_prepared
 
     @staticmethod
@@ -100,16 +97,10 @@ class MwBehaviour:
             print('Warning: the specimen has not been prepared yet.')
             is_fractured = ''
         else:
-            print('Use the prepared speciment to perform an experimental hole flanging test.')
-            print('G-code: %s' % gcode)
-            print("Enter Yes or No if the speciment has fractured or not, respectively. Enter anything else if the experiment hasn't been done yet.")
-            is_fractured = input('Is the specimen fractured (Yes/No)? ')
-            is_fractured = is_fractured.lower()
-            if is_fractured in ['yes', 'y', 'no', 'n']:
-                print('Ok, task completed.')
-            else:
-                print('Ok. Please note that this task has not been completed yet.')
-                is_fractured = ''
+
+            import Service_Layer.User_Query.check_for_fracture as cff
+            is_fractured = cff.check_for_fracture(gcode)
+            
         return is_fractured
 
     @staticmethod
@@ -121,7 +112,10 @@ class MwBehaviour:
             print('Flange height cannot be measured for a fractured specimen.')
             h = 0
         else: # is_fractured == "no"
-            h = float(input('Enter the measured flange height (mm): '))
+
+            import Service_Layer.User_Query.measure_flange_height as mfh
+            h = mfh.measure_flange_height()
+            
         return h
 
     @staticmethod
@@ -130,12 +124,10 @@ class MwBehaviour:
         if not is_fractured in ['yes', 'y', 'no', 'n']:
             print('Wait, wait... was the specimen fractured or not?')
         else: # is_fractured == "no" or "yes"
-            print('Use ARGUS to obtain the strain distribution along the flange.')
-            print('Save the results as a text file "strain.csv" and upload it to "Data_Layer/%s".' % instance_name)
-            q = input('Is the file already uploaded? (Yes/No) ')
-            q = q.lower()
-            if q in ['yes', 'y']:
-                strain = 'strain.csv'
+
+            import Service_Layer.User_Query.measure_strain_distribution as msd
+            strain = msd.measure_strain_distribution(instance_name)
+
         return strain
 
     @staticmethod
@@ -145,7 +137,10 @@ class MwBehaviour:
             her = 0
         else:
             print('Calculating HER...')
-            her = df/d0
+
+            import Service_Layer.Data_Processor.calculate_hole_expansion_ratio as cher
+            her = cher.calculate_hole_expansion_ratio(d0, df)
+            
             print('    Output: HER = df/d0 = %f' % her)
         return her
 
@@ -156,7 +151,10 @@ class MwBehaviour:
             h_df = 0
         else:
             print('Calculating h/df...')
-            h_df = h/df
+
+            import Service_Layer.Data_Processor.calculate_non_dimensional_flange_height as cndfh
+            h_df = cndfh.calculate_non_dimensional_flange_height(h, df)
+            
             print('    Output: h/df = %f' % h_df)
         return h_df
 
@@ -167,8 +165,10 @@ class MwBehaviour:
             t_t0 = 0
         else:
             print('Calculating t/t0...')
-            t = t0*(df-d0)/2/h                      # only for test purposes
-            t_t0 = t/t0
+
+            import Service_Layer.Data_Processor.calculate_non_dimensional_average_thickness as cndat
+            t_t0 = cndat.calculate_non_dimensional_average_thickness(t0, d0, df, h)
+            
             print('    Output: t/t0 = %f' % t_t0)
         return t_t0
 
@@ -182,7 +182,10 @@ class MwBehaviour:
             i.load()
             her = i.test_results.hole_expansion_ratio
             her_list.append(her)
-        global_lfr = max(her_list)    
+
+        import Service_Layer.Data_Processor.calculate_lfr as clfr
+        global_lfr = clfr.calculate_lfr(her_list)
+        
         return global_lfr
 
     @staticmethod
@@ -197,7 +200,10 @@ class MwBehaviour:
             if tool_R == R:
                 her = i.test_results.hole_expansion_ratio
                 her_list.append(her)
-        lfr_per_tool = max(her_list)    
+
+        import Service_Layer.Data_Processor.calculate_lfr as clfr
+        lfr_per_tool = clfr.calculate_lfr(her_list)
+        
         return lfr_per_tool
 
     @staticmethod
@@ -213,7 +219,7 @@ class MwBehaviour:
 
         print('Plotting FLD for all specimens...')
         
-        import Service_Layer.plot_results.plot_FLD as plot
+        import Service_Layer.Data_Processor.plot_FLD as plot
         global_fld = 'FLD_successful_tests.png'
         plot.plot_fld(instance_name, ffl_file, strain_file, strain_files, 
             'Data_Layer/%s/%s' % (instance_name, global_fld))
@@ -235,7 +241,7 @@ class MwBehaviour:
                 strain_files.append(fn)
 
         print('Plotting FLD for specimens tested with a tool radius R=%s...' % R)
-        import Service_Layer.plot_results.plot_FLD as plot
+        import Service_Layer.Data_Processor.plot_FLD as plot
         fld_per_tool = 'FLD_R%d.png' % R
         plot.plot_fld(instance_name, ffl_file, strain_file, strain_files, 
             'Data_Layer/%s/%s' % (instance_name, fld_per_tool))
@@ -257,7 +263,7 @@ class MwBehaviour:
                 strain_files.append(fn)
 
         print('Plotting FLD for this specimen along with successful tests...')
-        import Service_Layer.plot_results.plot_FLD as plot
+        import Service_Layer.Data_Processor.plot_FLD as plot
         fld_for_successful_tests = 'FLD_successful_tests.png'
         plot.plot_fld(instance_name, ffl_file, strain_file, strain_files, 
             'Data_Layer/%s/%s' % (instance_name, fld_for_successful_tests))
@@ -279,7 +285,7 @@ class MwBehaviour:
                 strain_files.append(fn)
 
         print('Plotting FLD for this specimen along with failed tests...')
-        import Service_Layer.plot_results.plot_FLD as plot
+        import Service_Layer.Data_Processor.plot_FLD as plot
         fld_for_fractured_tests = 'FLD_failed_tests.png'
         plot.plot_fld(instance_name, ffl_file, strain_file, strain_files, 
             'Data_Layer/%s/%s' % (instance_name, fld_for_fractured_tests))
@@ -301,7 +307,7 @@ class MwBehaviour:
                 data_SPIF.append([R, her, h_df])
         
         print('Plotting HER versus h/df...')
-        import Service_Layer.plot_results.plot_HER_h as plot
+        import Service_Layer.Data_Processor.plot_HER_h as plot
         flange_height_diagram = 'diagram_HER-h.png'
         plot.plot_her_h(data_SPIF, 'Data_Layer/%s/%s' % (instance_name, flange_height_diagram))
 
@@ -322,7 +328,7 @@ class MwBehaviour:
                 data_SPIF.append([R, her, t_t0])
         
         print('Plotting HER versus (t0-t)/t0...')
-        import Service_Layer.plot_results.plot_HER_t as plot
+        import Service_Layer.Data_Processor.plot_HER_t as plot
         average_thickness_diagram = 'diagram_HER-t.png'
         plot.plot_her_t(data_SPIF, 'Data_Layer/%s/%s' % (instance_name, average_thickness_diagram))
 
