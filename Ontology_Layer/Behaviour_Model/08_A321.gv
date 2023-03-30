@@ -51,6 +51,7 @@ c1 [label="is fractured = No"]
 
 # attaching constraints
 edge [dir=none, color=red, style=dashed]
-test -> c1 -> {t1, t2}
+test -> c1
+c1 -> {t1, t2}
 }
 

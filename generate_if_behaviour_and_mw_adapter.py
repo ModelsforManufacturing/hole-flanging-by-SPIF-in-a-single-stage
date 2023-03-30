@@ -209,15 +209,16 @@ def attach_internal_objects(s, tasks):
 
 def attach_constraints(s, tasks, constraints):
     edges = get_edges(s)
-    d = {}
-    for e in edges:
-        src, dst, lbl = e
-        for c in constraints:
+    for c in constraints:
+        d = {}
+        for e in edges:
+            src, dst, lbl = e
             if dst[0] in c:                     # e.g. '{o1, o2} -> c1'
-                d[constraints[c]] = src         # e.g. d = {'description': ['o1', 'o2']}
+                d[constraints[c]] = src         # e.g. d = {'<description>': ['o1', 'o2']}
             if src[0] in c:                     # e.g. 'c1 -> t1'
                 t = dst[0]
                 tasks[t]['constraints'] = d
+                print(tasks[t]['name'], ": ", d)
     return tasks
 
 
@@ -263,7 +264,14 @@ def generate_interface_method(task, objects):
     declare = '%s:' % (declare)
     
     # comments
-    comments = '%s%s\n' % (' '*indent, task['rule'])
+    comments = '%sMEANS: %s\n' % (' '*indent, task['mechanism'])
+    comments = '%s%sRULE: %s\n' % (comments, ' '*indent, task['rule'])
+    if 'constraints' in task:
+        comments = '%s%sCONSTRAINTS:\n' % (comments, ' '*indent)
+        counter = 0
+        for c in task['constraints']:
+            counter += 1
+            comments = '%s%s(%i) %s\n' % (comments, ' '*indent*2, counter, c)
     comments = '%s\n%sArguments:' % (comments, ' '*indent)
     args_counter = 0
     for i in task['inputs']:

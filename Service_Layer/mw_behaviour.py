@@ -180,8 +180,10 @@ class MwBehaviour:
         for instance_name in instances:
             i = DataInstance(instance_name)
             i.load()
-            her = i.test_results.hole_expansion_ratio
-            her_list.append(her)
+            is_fractured = i.test_results.is_fractured
+            if is_fractured in ['no', 'n']:
+                her = i.test_results.hole_expansion_ratio
+                her_list.append(her)
 
         import Service_Layer.Data_Processor.calculate_lfr as clfr
         global_lfr = clfr.calculate_lfr(her_list)

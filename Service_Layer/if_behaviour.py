@@ -11,7 +11,8 @@ class BehaviourInterface:
 
     def fix_properties(self) -> float, float, float, float, str:
     '''
-    Set values for properties that are common to all experimental tests
+    MEANS: User Query
+    RULE: Set values for properties that are common to all experimental tests
 
     Arguments:
     Output:
@@ -26,7 +27,10 @@ class BehaviourInterface:
     def plot_h_df(self,
         non_dimensional_flange_height_1: float) -> str:
     '''
-    Plot h/df vs. HER of successful hole-ﬂanged sheets
+    MEANS: Data Processor
+    RULE: Plot h/df vs. HER of successful hole-ﬂanged sheets
+    CONSTRAINTS:
+        (1) is fractured = No
 
     Arguments:
         non_dimensional_flange_height_1 -- type: TestResults.non_dimensional_flange_height
@@ -38,7 +42,8 @@ class BehaviourInterface:
     def plot_t_t0(self,
         non_dimensional_average_thickness_1: float) -> str:
     '''
-    Plot t/t0 vs. HER of successful hole-ﬂanged sheets
+    MEANS: Data Processor
+    RULE: Plot t/t0 vs. HER of successful hole-ﬂanged sheets
 
     Arguments:
         non_dimensional_average_thickness_1 -- type: TestResults.non_dimensional_average_thickness
@@ -51,7 +56,8 @@ class BehaviourInterface:
         strain_distribution_1: str,
         fracture_forming_limit_2: str) -> str:
     '''
-    Plot the FLD for all specimens
+    MEANS: Data Processor
+    RULE: Plot the FLD for all specimens
 
     Arguments:
         strain_distribution_1 -- type: TestResults.strain_distribution
@@ -66,7 +72,8 @@ class BehaviourInterface:
         fracture_forming_limit_2: str,
         radius_3: float) -> str:
     '''
-    Plot a FLD for all specimens tested by the same forming tool
+    MEANS: Data Processor
+    RULE: Plot a FLD for all specimens tested by the same forming tool
 
     Arguments:
         strain_distribution_1 -- type: TestResults.strain_distribution
@@ -82,7 +89,10 @@ class BehaviourInterface:
         fracture_forming_limit_2: str,
         is_fractured_3: str) -> str:
     '''
-    Plot a FLD for all successful tests with the minimum pre-cut hole diameters
+    MEANS: Data Processor
+    RULE: Plot a FLD for all successful tests with the minimum pre-cut hole diameters
+    CONSTRAINTS:
+        (1) is fractured = No
 
     Arguments:
         strain_distribution_1 -- type: TestResults.strain_distribution
@@ -98,7 +108,10 @@ class BehaviourInterface:
         fracture_forming_limit_2: str,
         is_fractured_3: str) -> str:
     '''
-    Plot a FLD for all failed tests closest to success
+    MEANS: Data Processor
+    RULE: Plot a FLD for all failed tests closest to success
+    CONSTRAINTS:
+        (1) is fractured = Yes
 
     Arguments:
         strain_distribution_1 -- type: TestResults.strain_distribution
@@ -115,7 +128,8 @@ class BehaviourInterface:
         radius_3: float,
         diameter_4: float) -> float:
     '''
-    Estimate the theoretical flange height of the part to be manufactured taking into account that the thickness distribution will be no homogeneous
+    MEANS: Equation Solver
+    RULE: Estimate the theoretical flange height of the part to be manufactured taking into account that the thickness distribution will be no homogeneous
 
     Arguments:
         thickness_1 -- type: BlankModel.thickness
@@ -135,7 +149,8 @@ class BehaviourInterface:
         feed_rate_5: float,
         step_down_6: float) -> str:
     '''
-    Calculate the helical tool path (with tool radius compensation) to form the hole flange part along the flange height (consider also the sheet thickness)
+    MEANS: CAD-CAM System
+    RULE: Calculate the helical tool path (with tool radius compensation) to form the hole flange part along the flange height (consider also the sheet thickness)
 
     Arguments:
         thickness_1 -- type: BlankModel.thickness
@@ -154,7 +169,10 @@ class BehaviourInterface:
         hole_diameter_2: float,
         g_code_3: str) -> str:
     '''
-    Show information about the specimen to be prepared (after 'g-code' is generated) and ask for confirmation.
+    MEANS: User Query
+    RULE: Show information about the specimen to be prepared (after 'g-code' is generated) and ask for confirmation.
+    CONSTRAINTS:
+        (1) 'g-code' exists
 
     Arguments:
         thickness_1 -- type: BlankModel.thickness
@@ -167,7 +185,8 @@ class BehaviourInterface:
 
     def ask_for_properties(self) -> float, float:
     '''
-    Ask the user for the values of the initial properties of an experimental test
+    MEANS: User Query
+    RULE: Ask the user for the values of the initial properties of an experimental test
 
     Arguments:
     Output:
@@ -181,7 +200,10 @@ class BehaviourInterface:
         diameter_2: float,
         is_fractured_3: str) -> float:
     '''
-    Only if no part fracture was found, calculate HER=df/d0.
+    MEANS: Data Processor
+    RULE: Only if no part fracture was found, calculate HER=df/d0.
+    CONSTRAINTS:
+        (1) is fractured = No
 
     Arguments:
         hole_diameter_1 -- type: BlankModel.hole_diameter
@@ -197,7 +219,8 @@ class BehaviourInterface:
         is_fractured_2: str,
         flange_height_3: float) -> float:
     '''
-    Only if no part fracture was found, calculate h/df.
+    MEANS: Data Processor
+    RULE: Only if no part fracture was found, calculate h/df.
 
     Arguments:
         diameter_1 -- type: PartModel.diameter
@@ -215,7 +238,8 @@ class BehaviourInterface:
         is_fractured_4: str,
         flange_height_5: float) -> float:
     '''
-    Only if no part fracture was found, calculate the average thickness t by volume conservation and return t/t0.
+    MEANS: Data Processor
+    RULE: Only if no part fracture was found, calculate the average thickness t by volume conservation and return t/t0.
 
     Arguments:
         hole_diameter_1 -- type: BlankModel.hole_diameter
@@ -232,7 +256,10 @@ class BehaviourInterface:
         hole_expansion_ratio_1: float,
         is_fractured_2: str) -> float:
     '''
-    For all unfractured specimens, calculate LFR=max(HER).
+    MEANS: Data Processior
+    RULE: For all unfractured specimens, calculate LFR=max(HER).
+    CONSTRAINTS:
+        (1) is fractured = No
 
     Arguments:
         hole_expansion_ratio_1 -- type: TestResults.hole_expansion_ratio
@@ -247,7 +274,8 @@ class BehaviourInterface:
         is_fractured_2: str,
         radius_3: float) -> float:
     '''
-    For all unfractured specimens tested by the same forming tool, calculate LFR=max(HER).
+    MEANS: Data Processior
+    RULE: For all unfractured specimens tested by the same forming tool, calculate LFR=max(HER).
 
     Arguments:
         hole_expansion_ratio_1 -- type: TestResults.hole_expansion_ratio
@@ -262,7 +290,10 @@ class BehaviourInterface:
         is_prepared_1: str,
         g_code_2: str) -> str:
     '''
-    Verify that the specimen is prepared, show information about the NC program to be executed, wait for the experimental test, and ask if fracture occurred.
+    MEANS: User Query
+    RULE: Verify that the specimen is prepared, show information about the NC program to be executed, wait for the experimental test, and ask if fracture occurred.
+    CONSTRAINTS:
+        (1) 'is prepared' = Yes
 
     Arguments:
         is_prepared_1 -- type: Specimen.is_prepared
@@ -275,7 +306,10 @@ class BehaviourInterface:
     def measure_flange_height(self,
         is_fractured_1: str) -> float:
     '''
-    Only if no part fracture was found, ask for the measured flange height.
+    MEANS: User Query
+    RULE: Only if no part fracture was found, ask for the measured flange height.
+    CONSTRAINTS:
+        (1) is fractured = No
 
     Arguments:
         is_fractured_1 -- type: TestResults.is_fractured
@@ -287,7 +321,10 @@ class BehaviourInterface:
     def measure_strain_distribution(self,
         is_fractured_1: str) -> str:
     '''
-    Either fracture was found or not, ask for the measured strain distribution along the flange.
+    MEANS: User Query
+    RULE: Either fracture was found or not, ask for the measured strain distribution along the flange.
+    CONSTRAINTS:
+        (1) is fractured = Yes/No
 
     Arguments:
         is_fractured_1 -- type: TestResults.is_fractured
@@ -299,7 +336,8 @@ class BehaviourInterface:
     def generate_g_code(self,
         toolpath_code_1: str) -> str:
     '''
-    Convert to G-code for the EMCO VMC-200 machining center and append program number, coordinates system, tool charge, etc.
+    MEANS: NC Post-Processor
+    RULE: Convert to G-code for the EMCO VMC-200 machining center and append program number, coordinates system, tool charge, etc.
 
     Arguments:
         toolpath_code_1 -- type: ToolPath.toolpath_code
